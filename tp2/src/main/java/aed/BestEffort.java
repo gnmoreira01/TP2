@@ -3,10 +3,16 @@ package aed;
 import java.util.ArrayList;
 
 public class BestEffort {
-    //Completar atributos privados
+    private ArrayList pedidos_por_ganancia;
+    private ArrayList pedidos_por_antiguedad;
+    private ArrayList vector_traslados;
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
-        // Implementar
+        while (i < traslados.length){
+            traslados.añadir_indice_vectortraslados(i);
+            vector_traslados.add(traslados[i]);
+        }
+
     }
 
     public void registrarTraslados(Traslado[] traslados){
