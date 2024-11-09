@@ -3,14 +3,27 @@ package aed;
 import java.util.ArrayList;
 
 public class BestEffort {
-    private ArrayList pedidos_por_ganancia;
-    private ArrayList pedidos_por_antiguedad;
+    private ArrayList heap_pedidos_por_ganancia;
+    private ArrayList heap_pedidos_por_antiguedad;
     private ArrayList vector_traslados;
+    private ArrayList heap_ciudades_mayor_superavit;
+    private int cantidad_pedidos_despachados;
+    private int ganancia_global;
+    private ArrayList estadisticas_ciudades;
+    private ArrayList ciudades_mayor_ganancia;
+    private ArrayList ciudades_mayor_pérdida;
+
+    /* estadisticas_ciudades es un vector de vectores con 4 posiciones, las cuales son ganancia, pérdida, superávit y posicion en el heap de
+     * superávit.
+     */
+
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
+        int i = 0;
         while (i < traslados.length){
-            traslados.añadir_indice_vectortraslados(i);
-            vector_traslados.add(traslados[i]);
+            heap_pedidos_por_antiguedad.add(traslados[i]);
+            heap_pedidos_por_ganancia.add(traslados[i]);
+            vector_traslados.add({traslados[i],null});
         }
 
     }

@@ -17,6 +17,30 @@ public class Traslado {
         this.indice = null;
     }
 
+    public int ganancia (){
+        return gananciaNeta;
+    }
+
+    public int id (){
+        return id;
+    }
+
+    public int origen (){
+        return origen;
+    }
+
+    public int destino (){
+        return destino;
+    }
+
+    public int timestamp () {
+        return timestamp;
+    }
+
+    public int indice (){
+        return indice;
+    }
+
     public añadir_indice_vectortraslados (int i){
         this.indice = i;
     }
