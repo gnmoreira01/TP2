@@ -4,7 +4,8 @@ public class Heap<T> {
     private ArrayList arr;
     private int longitud;
     private int tipo;
-    /* tipo = 0 equivale a heap por ganancia, i = 1 heap por antiguedad, i = 2 heap de ciudades por superávit */
+    /* tipo = 0 equivale a max-heap por ganancia, i = 1 min-heap por antiguedad e
+    i = 2 max-heap de ciudades por superávit */
 
     public Heap (int i){
         arr = new ArrayList<T>();
@@ -31,8 +32,8 @@ public class Heap<T> {
         if (2*i+2 < longitud){
             T hijoizq = this.hijoizquierdo(i);
             T hijoder = this.hijoderecho(i);
-            if (tipo != 2){
-                if (esMayorQueLosHijos(arr.get(i).get[3], i, i)){
+            if (tipo == 2){
+                if (esMayorQueLosHijos(arr.get(i).get(3), i, i)){
                     return;
                 }
                 else{
@@ -43,6 +44,16 @@ public class Heap<T> {
                 if (tipo == 0){
                     if (!esMayorQueLosHijos(this.get(i).ganancia(), hijoder.ganancia(), hijoizq.ganancia())){
                         if (arr.hijoizquierdo(i).ganancia() > arr.hijoderecho(i).ganancia){
+                            this.swap(i, 2*i+1);
+                        }
+                        else{
+                            this.swap(i,2*i+2);
+                        }
+                    }
+                }
+                if (tipo == 1){
+                    if (esMayorQueLosHijos(this.get(i).ganancia(), hijoder.ganancia(), hijoizq.ganancia())){
+                        if (arr.hijoizquierdo(i).indice() < arr.hijoderecho(i).indice()){
                             this.swap(i, 2*i+1);
                         }
                         else{
