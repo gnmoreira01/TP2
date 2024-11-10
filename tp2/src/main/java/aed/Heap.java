@@ -12,10 +12,11 @@ public class Heap<T> {
         tipo = i;
     }
 
-    public añadir (T elem){
+    public encolar (T elem){
         if (arr.size() == 0);
             arr.add(elem);
         else{
+            arr.add(elem);
             
         }
     }
@@ -24,47 +25,70 @@ public class Heap<T> {
         return arr.get(2*i + 1);
     }
 
+    private int valor_i (int i){
+        if (tipo == 0){
+            return arr.get(i).ganancia();
+        }
+        else{
+            if (tipo == 1){
+                return arr.get(i).antiguedad();
+            }
+            else{
+                return arr.get(i).get(2);
+            }
+        }
+    }
+
+    private int valor_hijo_izquierdo (int i){
+        if (tipo == 0){
+            return this.hijoizquierdo(i).ganancia();
+        }
+        else{
+            if (tipo == 1){
+                return this.hijoizquierdo(i).antiguedad();
+            }
+            else{
+                return this.hijoizquierdo(i).get(2);
+            }
+        }
+    }
+
+    private int valor_hijo_derecho (int i){
+        if (tipo == 0){
+            return this.hijoderecho(i).ganancia();
+        }
+        else{
+            if (tipo == 1){
+                return this.hijoderecho(i).antiguedad();
+            }
+            else{
+                return this.hijoderecho(i).get(2);
+            }
+        }
+    }
+
     private T hijoderecho (int i){
         return arr.get(2*i+2);
     }
 
     private void heapify_aux (int i){
         if (2*i+2 < longitud){
-            T hijoizq = this.hijoizquierdo(i);
-            T hijoder = this.hijoderecho(i);
-            if (tipo == 2){
-                if (esMayorQueLosHijos(arr.get(i).get(3), i, i)){
-                    return;
+            int padre = this.valor_i(i);
+            int hijoizq = this.valor_hijo_izquierdo(i);
+            int hijoder = this.valor_hijo_derecho(i);
+            if (!esMayorQueLosHijos(padre, hijoizq, hijoder)){
+                if (hijoizq > hijoder){
+                    this.swap(i, 2*i+1);
                 }
                 else{
-
-                }
-            }
-            else{
-                if (tipo == 0){
-                    if (!esMayorQueLosHijos(this.get(i).ganancia(), hijoder.ganancia(), hijoizq.ganancia())){
-                        if (arr.hijoizquierdo(i).ganancia() > arr.hijoderecho(i).ganancia){
-                            this.swap(i, 2*i+1);
-                        }
-                        else{
-                            this.swap(i,2*i+2);
-                        }
-                    }
-                }
-                if (tipo == 1){
-                    if (esMayorQueLosHijos(this.get(i).ganancia(), hijoder.ganancia(), hijoizq.ganancia())){
-                        if (arr.hijoizquierdo(i).indice() < arr.hijoderecho(i).indice()){
-                            this.swap(i, 2*i+1);
-                        }
-                        else{
-                            this.swap(i,2*i+2);
-                        }
-                    }
+                    this.swap(i,2*i+2);
                 }
             }
         }
         else if (2*i+1 < longitud){
-
+            if (padre < hijoizq){
+                this.swap(i, 2*i+1);
+            }
         }
     }
 
@@ -76,7 +100,7 @@ public class Heap<T> {
     }
 
     private boolean esMayorQueLosHijos (int padre, int hijoizquierdo, int hijoderecho){
-        if (padre > hijoizquierdo && padre > Hijo.derecho){
+        if (padre > hijoizquierdo && padre > hijoderecho){
             return true;
         }
         else {
