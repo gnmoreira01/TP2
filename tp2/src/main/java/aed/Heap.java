@@ -13,11 +13,39 @@ public class Heap<T> {
     }
 
     public encolar (T elem){
-        if (arr.size() == 0);
+        if (arr.size() == 0){
             arr.add(elem);
+            longitud += 1;
+        }  
         else{
             arr.add(elem);
-            
+            longitud+=1;
+            double indice_padre = Math.floor((longitud-2)/2);
+            int k = longitud - 1;
+            while ((this.valor_i(indice_padre) < this.valor_i(longitud-1)) && () ){
+                this.swap(indice_padre,longitud-1);
+            }
+        }
+    }
+
+    public desencolar(){
+        swap(0,longitud-1);
+        longitud--;
+        if(longitud > 0){
+            int actual = 0;
+            int valorAntesDelHeapify = valor_i(actual);
+            while(actual*2+1 < longitud){
+                heapify_aux(actual);
+                if(valorAntesDelHeapify == valor_i(actual)){
+                    return;
+                }
+                else if(valorAntesDelHeapify == valor_i(actual*2+1)){
+                    actual = actual*2+1;
+                }
+                else{
+                    actual = actual*2+2;
+                }
+            }
         }
     }
 
