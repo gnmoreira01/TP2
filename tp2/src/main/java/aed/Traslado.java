@@ -7,6 +7,8 @@ public class Traslado {
     int gananciaNeta;
     int timestamp;
     int antiguedad;
+    int pos_heap_ganancia;
+    int pos_heap_antiguedad;
 
     public Traslado(int id, int origen, int destino, int gananciaNeta, int timestamp){
         this.id = id;
@@ -44,4 +46,6 @@ public class Traslado {
     public añadir_antiguedad (int i){
         this.antiguedad = i;
     }
+
+    public añadir_pos_heap_antig
 }

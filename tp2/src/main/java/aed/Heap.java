@@ -1,7 +1,8 @@
 import java.util.ArrayList;
+import aed.Traslado;
 
 public class Heap<T> {
-    private ArrayList arr;
+    private ArrayList<T> arr;
     private int longitud;
     private int tipo;
     /* tipo = 0 equivale a max-heap por ganancia, i = 1 min-heap por antiguedad e
@@ -10,6 +11,15 @@ public class Heap<T> {
     public Heap (int i){
         arr = new ArrayList<T>();
         tipo = i;
+    }
+
+    public Heap (ArrayList<T> array, int t){
+        longitud = array.size();
+        tipo = t;
+        arr = array;
+        for (int i = longitud - 1; i > -1; i--){
+            heapify_aux(i);
+        }
     }
 
     public encolar (T elem){
@@ -22,18 +32,24 @@ public class Heap<T> {
             longitud+=1;
             double indice_padre = Math.floor((longitud-2)/2);
             int k = longitud - 1;
-            while ((this.valor_i(indice_padre) < this.valor_i(longitud-1)) && () ){
-                this.swap(indice_padre,longitud-1);
+            while ((this.valor_i(indice_padre) < this.valor_i(k)) && k!= 0){
+                this.swap(indice_padre,k);
+                k = indice_padre;
+                indice_padre = Math.floor((k-1)/2);
             }
         }
     }
 
     public desencolar(){
-        swap(0,longitud-1);
+        eliminarPorIndice(0);
+    }
+
+    private eliminarPorIndice(int pos){
+        swap(pos,longitud-1);
         longitud--;
         if(longitud > 0){
-            int actual = 0;
-            int valorAntesDelHeapify = valor_i(actual);
+            actual = pos;
+            int valorAntesDelHeapify = valor_i(pos);
             while(actual*2+1 < longitud){
                 heapify_aux(actual);
                 if(valorAntesDelHeapify == valor_i(actual)){
@@ -51,6 +67,10 @@ public class Heap<T> {
 
     private T hijoizquierdo (int i){
         return arr.get(2*i + 1);
+    }
+
+    private T hijoderecho (int i){
+        return arr.get(2*i+2);
     }
 
     private int valor_i (int i){
@@ -95,10 +115,6 @@ public class Heap<T> {
         }
     }
 
-    private T hijoderecho (int i){
-        return arr.get(2*i+2);
-    }
-
     private void heapify_aux (int i){
         if (2*i+2 < longitud){
             int padre = this.valor_i(i);
@@ -121,8 +137,20 @@ public class Heap<T> {
     }
 
     private void swap (int i, int k){
-        int elem_i = arr.get(i);
-        int elem_k = arr.get(k);
+        T elem_i = arr.get(i);
+        T elem_k = arr.get(k);
+        if (tipo == 0){
+            elem_i.pos_heap_ganancia = k;
+            elem_k.pos_heap_ganancia = i;
+        }
+        else if (tipo == 1){
+            elem_i.pos_heap_antiguedad = k;
+            elem_k.pos_heap_antiguedad = i;
+        }
+        else{
+            elem_i.set(3,k);
+            elem_k.set(3,i);
+        }
         arr.set(i,elem_k);
         arr.set(k,elem_i);
     }

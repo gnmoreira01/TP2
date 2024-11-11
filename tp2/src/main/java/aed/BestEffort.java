@@ -1,12 +1,13 @@
 package aed;
 
 import java.util.ArrayList;
+import Heap;
 
 public class BestEffort {
-    private ArrayList heap_pedidos_por_ganancia;
-    private ArrayList heap_pedidos_por_antiguedad;
+    private Heap<Traslado> heap_pedidos_por_ganancia;
+    private Heap<Traslado> heap_pedidos_por_antiguedad;
     private ArrayList vector_traslados;
-    private ArrayList heap_ciudades_mayor_superavit;
+    private Heap heap_ciudades_mayor_superavit;
     private int cantidad_pedidos_despachados;
     private int ganancia_global;
     private ArrayList estadisticas_ciudades;
