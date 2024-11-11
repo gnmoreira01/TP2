@@ -43,6 +43,14 @@ public class Traslado {
         return antiguedad;
     }
 
+    public int pos_heap_ganancia(){
+        return pos_heap_ganancia;
+    }
+
+    public int pos_heap_antiguedad(){
+        return pos_heap_antiguedad;
+    }
+
     public void añadir_antiguedad (int i){
         this.antiguedad = i;
     }
