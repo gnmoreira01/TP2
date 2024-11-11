@@ -1,5 +1,5 @@
+
 import java.util.ArrayList;
-import aed.Traslado;
 
 public class Heap<T> {
     private ArrayList<T> arr;
@@ -22,7 +22,7 @@ public class Heap<T> {
         }
     }
 
-    public encolar (T elem){
+    public void encolar (T elem){
         if (arr.size() == 0){
             arr.add(elem);
             longitud += 1;
@@ -30,25 +30,27 @@ public class Heap<T> {
         else{
             arr.add(elem);
             longitud+=1;
-            double indice_padre = Math.floor((longitud-2)/2);
+            double a = Math.floor((longitud-2)/2);
+            int indice_padre = (int) a;
             int k = longitud - 1;
             while ((this.valor_i(indice_padre) < this.valor_i(k)) && k!= 0){
-                this.swap(indice_padre,k);
-                k = indice_padre;
-                indice_padre = Math.floor((k-1)/2);
+                int ind_pad = (int) indice_padre;
+                this.swap(ind_pad,k);
+                k = ind_pad;
+                indice_padre = (int) Math.floor((k-1)/2);
             }
         }
     }
 
-    public desencolar(){
+    public void desencolar(){
         eliminarPorIndice(0);
     }
 
-    private eliminarPorIndice(int pos){
+    private void eliminarPorIndice(int pos){
         swap(pos,longitud-1);
         longitud--;
         if(longitud > 0){
-            actual = pos;
+            int actual = pos;
             int valorAntesDelHeapify = valor_i(pos);
             while(actual*2+1 < longitud){
                 heapify_aux(actual);
@@ -130,6 +132,8 @@ public class Heap<T> {
             }
         }
         else if (2*i+1 < longitud){
+            int padre = this.valor_i(i);
+            int hijoizq = this.valor_hijo_izquierdo(i);
             if (padre < hijoizq){
                 this.swap(i, 2*i+1);
             }
@@ -140,16 +144,22 @@ public class Heap<T> {
         T elem_i = arr.get(i);
         T elem_k = arr.get(k);
         if (tipo == 0){
-            elem_i.pos_heap_ganancia = k;
-            elem_k.pos_heap_ganancia = i;
+            Traslado ielem = (Traslado) elem_i;
+            Traslado kelem = (Traslado) elem_i;
+            ielem.añadir_pos_heap_ganancia(k);
+            kelem.añadir_pos_heap_ganancia(i);
         }
         else if (tipo == 1){
-            elem_i.pos_heap_antiguedad = k;
-            elem_k.pos_heap_antiguedad = i;
+            Traslado ielem = (Traslado) elem_i;
+            Traslado kelem = (Traslado) elem_i;
+            ielem.añadir_pos_heap_antiguedad(k);
+            kelem.añadir_pos_heap_antiguedad(i);
         }
         else{
-            elem_i.set(3,k);
-            elem_k.set(3,i);
+            ArrayList<Integer> ielem = (ArrayList<Integer>) elem_i;
+            ArrayList<Integer> kelem = (ArrayList<Integer>) elem_k;
+            ielem.set(3,k);
+            kelem.set(3,i);
         }
         arr.set(i,elem_k);
         arr.set(k,elem_i);

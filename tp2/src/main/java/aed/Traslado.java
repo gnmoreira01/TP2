@@ -16,7 +16,7 @@ public class Traslado {
         this.destino = destino;
         this.gananciaNeta = gananciaNeta;
         this.timestamp = timestamp;
-        this.antiguedad = null;
+        //this.antiguedad = null;
     }
 
     public int ganancia (){
@@ -43,9 +43,15 @@ public class Traslado {
         return antiguedad;
     }
 
-    public añadir_antiguedad (int i){
+    public void añadir_antiguedad (int i){
         this.antiguedad = i;
     }
 
-    public añadir_pos_heap_antig
+    public void añadir_pos_heap_ganancia(int i){
+        this.pos_heap_ganancia = i;
+    }
+
+    public void añadir_pos_heap_antiguedad(int i){
+        this.pos_heap_ganancia = i;
+    }
 }
