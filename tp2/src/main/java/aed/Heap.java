@@ -34,11 +34,16 @@ public class Heap<T> {
             double a = Math.floor((longitud-2)/2);
             int indice_padre = (int) a;
             int k = longitud - 1;
-            while ((this.valor_i(indice_padre) < this.valor_i(k)) && k!= 0){
-                int ind_pad = (int) indice_padre;
-                this.swap(ind_pad,k);
-                k = ind_pad;
-                indice_padre = (int) Math.floor((k-1)/2);
+            while ((this.valor_i(indice_padre) <= this.valor_i(k)) && k!= 0){
+                if((this.valor_i(indice_padre) < this.valor_i(k)) || menorSegunElSegundoCriterio(k,indice_padre)){
+                    int ind_pad = (int) indice_padre;
+                    this.swap(ind_pad,k);
+                    k = ind_pad;
+                    indice_padre = (int) Math.floor((k-1)/2);
+                }
+                else{
+                    return;
+                }
             }
         }
     }
@@ -67,17 +72,7 @@ public class Heap<T> {
             }
         }
     }
-
-    private T hijoizquierdo (int i){
-        return arr.get(2*i + 1);
-    }
-
-    private T hijoderecho (int i){
-        return arr.get(2*i+2);
-    }
-// Seguramente borremos estas dos que son completamente inutiles por lo visto
-
-
+    
     private int valor_i (int i){
         if (tipo == 0){
             ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
@@ -92,6 +87,16 @@ public class Heap<T> {
                 ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) arr;
                 return a.get(i).get(2);
             }
+        }
+    }
+    
+    private int valorSegundoCriterio_i (int i){
+        if (tipo == 0){
+            ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
+            return a.get(i).id();
+        }
+        else{
+            return i;
         }
     }
 
