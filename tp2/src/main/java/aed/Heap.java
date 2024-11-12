@@ -100,6 +100,15 @@ public class Heap<T> {
         }
     }
 
+    private boolean menorSegunElSegundoCriterio(int i, int j){
+        if(valorSegundoCriterio_i(i) < valorSegundoCriterio_i(j)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
     private int valor_hijo_izquierdo (int i){
         return this.valor_i(2*i+1);
     }
