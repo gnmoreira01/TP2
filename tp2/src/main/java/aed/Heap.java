@@ -97,33 +97,10 @@ public class Heap<T> {
 
     private int valor_hijo_izquierdo (int i){
         return this.valor_i(2*i+1);
-        /*if (tipo == 0){
-            return this.hijoizquierdo(i).ganancia();
-        }
-        else{
-            if (tipo == 1){
-                return this.hijoizquierdo(i).antiguedad();
-            }
-            else{
-                return this.hijoizquierdo(i).get(2);
-            }
-        }*/
     }
 
     private int valor_hijo_derecho (int i){
         return this.valor_i (2*i+2);
-        /*
-        if (tipo == 0){
-            return this.hijoderecho(i).ganancia();
-        }
-        else{
-            if (tipo == 1){
-                return this.hijoderecho(i).antiguedad();
-            }
-            else{
-                return this.hijoderecho(i).get(2);
-            }
-        }*/
     }
 
     private void heapify_aux (int i){
