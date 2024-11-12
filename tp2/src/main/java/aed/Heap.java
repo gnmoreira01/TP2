@@ -18,7 +18,7 @@ public class Heap<T> {
         tipo = t;
         arr = array;
         for (int i = longitud - 1; i > -1; i--){
-            heapify_aux(i);
+            bajar(i);
             // Falta agregar las posiciones en el heap para cada pedido,
         }
     }
@@ -57,7 +57,6 @@ public class Heap<T> {
         return arr.get(2*i+2);
     }
 
-    
     public void desencolar(){
         eliminarPorIndice(0);
     }
@@ -69,7 +68,7 @@ public class Heap<T> {
             int actual = pos;
             int valorAntesDelHeapify = valor_i(pos);
             while(actual*2+1 < longitud){
-                heapify_aux(actual);
+                bajar(actual);
                 if(valorAntesDelHeapify == valor_i(actual)){
                     return;
                 }
@@ -127,7 +126,7 @@ public class Heap<T> {
         return this.valor_i (2*i+2);
     }
 
-    private void heapify_aux (int i){
+    private void bajar (int i){
         if (2*i+2 < longitud){
             int padre = this.valor_i(i);
             int hijoizq = this.valor_hijo_izquierdo(i);
