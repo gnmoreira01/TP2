@@ -67,12 +67,13 @@ public class Heap<T> {
         if(longitud > 0){
             int actual = pos;
             int valorAntesDelHeapify = valor_i(pos);
+            int segundoValorAntesDelHeapify = valorSegundoCriterio_i(pos); 
             while(actual*2+1 < longitud){
-                bajar(actual);
-                if(valorAntesDelHeapify == valor_i(actual)){
+                heapify_aux(actual);
+                if((valorAntesDelHeapify == valor_i(actual)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual))){
                     return;
                 }
-                else if(valorAntesDelHeapify == valor_i(actual*2+1)){
+                else if((valorAntesDelHeapify == valor_i(actual*2+1)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual*2+1))){
                     actual = actual*2+1;
                 }
                 else{
@@ -80,6 +81,7 @@ public class Heap<T> {
                 }
             }
         }
+    }
     }
     
     private int valor_i (int i){
@@ -126,24 +128,31 @@ public class Heap<T> {
         return this.valor_i (2*i+2);
     }
 
-    private void bajar (int i){
+private void heapify_aux (int i){
         if (2*i+2 < longitud){
             int padre = this.valor_i(i);
-            int hijoizq = this.valor_hijo_izquierdo(i);
-            int hijoder = this.valor_hijo_derecho(i);
-            if (!esMayorQueLosHijos(padre, hijoizq, hijoder)){
-                if (hijoizq > hijoder){
-                    this.swap(i, 2*i+1);
+            int hijoIzq = 2*i+1;
+            int hijoDer = 2*i+2;
+            int valorHijoIzq = this.valor_hijo_izquierdo(hijoIzq);
+            int valorHijoDer = this.valor_hijo_derecho(hijoDer);            
+            if (!esMayorQueLosHijos(padre, valorHijoIzq, valorHijoDer)){
+                if (valorHijoIzq > valorHijoDer || ((valorHijoIzq == valorHijoDer) && menorSegunElSegundoCriterio(hijoIzq, hijoDer))){
+                    if((valorHijoIzq > padre) || (((valorHijoIzq == padre) && menorSegunElSegundoCriterio(hijoIzq, i)))){
+                        this.swap(i, 2*i+1);
+                    }
                 }
                 else{
-                    this.swap(i,2*i+2);
+                    if((valorHijoDer > padre) || (((valorHijoDer == padre) && menorSegunElSegundoCriterio(hijoDer, i)))){
+                        this.swap(i,2*i+2);
+                    }
                 }
             }
         }
         else if (2*i+1 < longitud){
             int padre = this.valor_i(i);
-            int hijoizq = this.valor_hijo_izquierdo(i);
-            if (padre < hijoizq){
+            int hijoIzq = 2*i+1;
+            int valorHijoIzq = this.valor_hijo_izquierdo(hijoIzq);
+            if ((padre < valorHijoIzq) || ((padre == valorHijoIzq) && (menorSegunElSegundoCriterio(hijoIzq, i)))){
                 this.swap(i, 2*i+1);
             }
         }
