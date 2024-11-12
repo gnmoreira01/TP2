@@ -6,7 +6,7 @@ public class Traslado {
     int destino;
     int gananciaNeta;
     int timestamp;
-    int antiguedad;
+    int indice;
     int pos_heap_ganancia;
     int pos_heap_antiguedad;
 
@@ -39,8 +39,12 @@ public class Traslado {
         return timestamp;
     }
 
-    public int antiguedad (){
-        return antiguedad;
+    public void negar_timestamp(){
+        timestamp = (-1) * timestamp;
+    }
+
+    public int indice (){
+        return indice;
     }
 
     public int pos_heap_ganancia(){
@@ -51,8 +55,8 @@ public class Traslado {
         return pos_heap_antiguedad;
     }
 
-    public void añadir_antiguedad (int i){
-        this.antiguedad = i;
+    public void añadir_indice (int i){
+        this.indice = i;
     }
 
     public void añadir_pos_heap_ganancia(int i){

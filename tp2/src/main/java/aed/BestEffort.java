@@ -9,7 +9,7 @@ public class BestEffort {
     private Heap<ArrayList<Integer>> heap_ciudades_mayor_superavit;
     private int cantidad_pedidos_despachados;
     private int ganancia_global;
-    private ArrayList<Integer> estadisticas_ciudades;
+    private ArrayList<ArrayList<Integer>> estadisticas_ciudades;
     private ArrayList<ArrayList<Integer>> ciudades_mayor_ganancia;
     private ArrayList<ArrayList<Integer>> ciudades_mayor_perdida;
 
@@ -23,6 +23,15 @@ public class BestEffort {
         ganancia_global = 0;
         ciudades_mayor_ganancia = new ArrayList<ArrayList<Integer>> ();
         ciudades_mayor_perdida = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < traslados.length; i++){
+            traslados[i].añadir_indice(i);
+            traslados[i].negar_timestamp(); //Esto es solo para convertirlo en un max-heap más facilmente.
+            vector_traslados.add(traslados[i]);
+        }
+        heap_pedidos_por_ganancia = new Heap<Traslado>(vector_traslados, 0);
+        heap_pedidos_por_antiguedad = new Heap <Traslado> (vector_traslados, 1);
+        estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
+        heap_ciudades_mayor_superavit = new Heap <ArrayList<Integer>>(2);
         }
 
     public void registrarTraslados(Traslado[] traslados){

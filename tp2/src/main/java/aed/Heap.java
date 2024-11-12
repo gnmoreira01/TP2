@@ -1,35 +1,48 @@
 package aed;
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class Heap<T> {
-    private ArrayList<T> arr;
+    private ArrayList<T> atributo_array ;
     private int longitud;
     private int tipo;
     /* tipo = 0 equivale a max-heap por ganancia, i = 1 min-heap por antiguedad e
     i = 2 max-heap de ciudades por superávit */
 
     public Heap (int i){
-        arr = new ArrayList<T>();
+        atributo_array = new ArrayList<T>();
         tipo = i;
     }
 
     public Heap (ArrayList<T> array, int t){
         longitud = array.size();
         tipo = t;
-        arr = array;
+        atributo_array = array;
         for (int i = longitud - 1; i > -1; i--){
+            if (tipo == 0){
+                ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
+                a.get(i).añadir_pos_heap_ganancia(i);
+            }  
+            else if (tipo == 1){
+                ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
+                a.get(i).añadir_pos_heap_antiguedad(i);
+            }
+            else{
+                ArrayList<ArrayList<Integer>> a = (ArrayList<ArrayList<Integer>>) atributo_array;
+                a.get(i).set(3,i);
+            }
             heapify_aux(i);
-            // Falta agregar las posiciones en el heap para cada pedido,
         }
+
     }
 
     public void encolar (T elem){
-        if (arr.size() == 0){
-            arr.add(elem);
+        if (atributo_array.size() == 0){
+            atributo_array.add(elem);
             longitud += 1;
         }  
         else{
-            arr.add(elem);
+            atributo_array.add(elem);
             longitud+=1;
             double a = Math.floor((longitud-2)/2);
             int indice_padre = (int) a;
@@ -50,11 +63,11 @@ public class Heap<T> {
 
 
     private T hijoizquierdo (int i){
-        return arr.get(2*i+1);
+        return atributo_array.get(2*i+1);
     }
 
     private T hijoderecho (int i){
-        return arr.get(2*i+2);
+        return atributo_array.get(2*i+2);
     }
 
     public void desencolar(){
@@ -85,24 +98,24 @@ public class Heap<T> {
     
     private int valor_i (int i){
         if (tipo == 0){
-            ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
+            ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
             return a.get(i).ganancia();
         }
         else{
             if (tipo == 1){
-                ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
-                return a.get(i).antiguedad();
+                ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
+                return a.get(i).timestamp();
             }
             else{
-                ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) arr;
-                return a.get(i).get(2);
+                ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
+                return a.get(i).get(3);
             }
         }
     }
     
     private int valorSegundoCriterio_i (int i){
         if (tipo == 0){
-            ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
+            ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
             return a.get(i).id();
         }
         else{
@@ -158,8 +171,8 @@ private void heapify_aux (int i){
     }
 
     private void swap (int i, int k){
-        T elem_i = arr.get(i);
-        T elem_k = arr.get(k);
+        T elem_i = atributo_array.get(i);
+        T elem_k = atributo_array.get(k);
         if (tipo == 0){
             Traslado ielem = (Traslado) elem_i;
             Traslado kelem = (Traslado) elem_i;
@@ -178,8 +191,8 @@ private void heapify_aux (int i){
             ielem.set(3,k);
             kelem.set(3,i);
         }
-        arr.set(i,elem_k);
-        arr.set(k,elem_i);
+        atributo_array.set(i,elem_k);
+        atributo_array.set(k,elem_i);
     }
 
     private boolean esMayorQueLosHijos (int padre, int hijoizquierdo, int hijoderecho){
