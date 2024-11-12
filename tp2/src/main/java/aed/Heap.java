@@ -1,4 +1,4 @@
-
+package aed;
 import java.util.ArrayList;
 
 public class Heap<T> {
@@ -77,20 +77,24 @@ public class Heap<T> {
 
     private int valor_i (int i){
         if (tipo == 0){
-            return arr.get(i).ganancia();
+            ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
+            return a.get(i).ganancia();
         }
         else{
             if (tipo == 1){
-                return arr.get(i).antiguedad();
+                ArrayList<Traslado> a = (ArrayList<Traslado>) arr;
+                return a.get(i).antiguedad();
             }
             else{
-                return arr.get(i).get(2);
+                ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) arr;
+                return a.get(i).get(2);
             }
         }
     }
 
     private int valor_hijo_izquierdo (int i){
-        if (tipo == 0){
+        return this.valor_i(2*i+1);
+        /*if (tipo == 0){
             return this.hijoizquierdo(i).ganancia();
         }
         else{
@@ -100,10 +104,12 @@ public class Heap<T> {
             else{
                 return this.hijoizquierdo(i).get(2);
             }
-        }
+        }*/
     }
 
     private int valor_hijo_derecho (int i){
+        return this.valor_i (2*i+2);
+        /*
         if (tipo == 0){
             return this.hijoderecho(i).ganancia();
         }
@@ -114,7 +120,7 @@ public class Heap<T> {
             else{
                 return this.hijoderecho(i).get(2);
             }
-        }
+        }*/
     }
 
     private void heapify_aux (int i){
