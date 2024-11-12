@@ -18,7 +18,7 @@ public class Heap<T> {
         tipo = t;
         arr = array;
         for (int i = longitud - 1; i > -1; i--){
-            bajar(i);
+            heapify_aux(i);
             // Falta agregar las posiciones en el heap para cada pedido,
         }
     }
@@ -81,7 +81,6 @@ public class Heap<T> {
                 }
             }
         }
-    }
     }
     
     private int valor_i (int i){
