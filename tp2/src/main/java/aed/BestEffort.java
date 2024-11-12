@@ -11,7 +11,7 @@ public class BestEffort {
     private int ganancia_global;
     private ArrayList<Integer> estadisticas_ciudades;
     private ArrayList<ArrayList<Integer>> ciudades_mayor_ganancia;
-    private ArrayList<ArrayList<Integer>> ciudades_mayor_pérdida;
+    private ArrayList<ArrayList<Integer>> ciudades_mayor_perdida;
 
     /* estadisticas_ciudades es un vector de vectores con 4 posiciones, las cuales son ganancia, pérdida, superávit y posicion en el heap de
      * superávit.
@@ -19,7 +19,10 @@ public class BestEffort {
 
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
-        int i = 0;
+        cantidad_pedidos_despachados = 0;
+        ganancia_global = 0;
+        ciudades_mayor_ganancia = new ArrayList<ArrayList<Integer>> ();
+        ciudades_mayor_perdida = new ArrayList<ArrayList<Integer>>();
         }
 
     public void registrarTraslados(Traslado[] traslados){

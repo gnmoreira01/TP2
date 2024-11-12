@@ -19,6 +19,7 @@ public class Heap<T> {
         arr = array;
         for (int i = longitud - 1; i > -1; i--){
             heapify_aux(i);
+            // Falta agregar las posiciones en el heap para cada pedido,
         }
     }
 
@@ -74,6 +75,8 @@ public class Heap<T> {
     private T hijoderecho (int i){
         return arr.get(2*i+2);
     }
+// Seguramente borremos estas dos que son completamente inutiles por lo visto
+
 
     private int valor_i (int i){
         if (tipo == 0){
