@@ -48,6 +48,16 @@ public class Heap<T> {
         }
     }
 
+
+    private T hijoizquierdo (int i){
+        return arr.get(2*i+1);
+    }
+
+    private T hijoderecho (int i){
+        return arr.get(2*i+2);
+    }
+
+    
     public void desencolar(){
         eliminarPorIndice(0);
     }
