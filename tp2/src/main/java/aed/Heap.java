@@ -9,6 +9,8 @@ public class Heap<T> {
     /* tipo = 0 equivale a max-heap por ganancia, i = 1 min-heap por antiguedad e
     i = 2 max-heap de ciudades por superávit */
 
+
+    // El tema de actualizar los otros heaps al despachar lo solucionamos haciendo eliminar y encolar, solo queda 2 log n en vez de log n, lo cual es lo mismo en el O().
     public Heap (int i){
         atributo_array = new ArrayList<T>();
         tipo = i;

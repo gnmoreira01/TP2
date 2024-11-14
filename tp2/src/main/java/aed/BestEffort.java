@@ -31,6 +31,12 @@ public class BestEffort {
         heap_pedidos_por_ganancia = new Heap<Traslado>(vector_traslados, 0);
         heap_pedidos_por_antiguedad = new Heap <Traslado> (vector_traslados, 1);
         estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < cantCiudades; i++){
+            ArrayList<ArrayList<Integer>> a = new ArrayList<ArrayList<Integer>>();
+            a.set(i,a.get(0)set();
+
+        }
+        
         heap_ciudades_mayor_superavit = new Heap <ArrayList<Integer>>(2);
         }
 
@@ -54,7 +60,9 @@ public class BestEffort {
     }
 
     public ArrayList<Integer> ciudadesConMayorGanancia(){
-        // Implementar
+        if (cantidad_pedidos_despachados == 0){
+            return 
+        }
         return null;
     }
 
