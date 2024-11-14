@@ -9,9 +9,9 @@ public class BestEffort {
     private Heap<ArrayList<Integer>> heap_ciudades_mayor_superavit;
     private int cantidad_pedidos_despachados;
     private int ganancia_global;
-    private ArrayList<ArrayList<Integer>> estadisticas_ciudades;
-    private ArrayList<ArrayList<Integer>> ciudades_mayor_ganancia;
-    private ArrayList<ArrayList<Integer>> ciudades_mayor_perdida;
+    private int [] [] estadisticas_ciudades;
+    private ArrayList<Integer> ciudades_mayor_ganancia;
+    private ArrayList<Integer> ciudades_mayor_perdida;
 
     /* estadisticas_ciudades es un vector de vectores con 4 posiciones, las cuales son ganancia, pérdida, superávit y posicion en el heap de
      * superávit.
@@ -21,8 +21,8 @@ public class BestEffort {
     public BestEffort(int cantCiudades, Traslado[] traslados){
         cantidad_pedidos_despachados = 0;
         ganancia_global = 0;
-        ciudades_mayor_ganancia = new ArrayList<ArrayList<Integer>> ();
-        ciudades_mayor_perdida = new ArrayList<ArrayList<Integer>>();
+        ciudades_mayor_ganancia = new ArrayList<Integer> ();
+        ciudades_mayor_perdida = new ArrayList<Integer>();
         for (int i = 0; i < traslados.length; i++){
             traslados[i].añadir_indice(i);
             traslados[i].negar_timestamp(); //Esto es solo para convertirlo en un max-heap más facilmente.
@@ -30,18 +30,27 @@ public class BestEffort {
         }
         heap_pedidos_por_ganancia = new Heap<Traslado>(vector_traslados, 0);
         heap_pedidos_por_antiguedad = new Heap <Traslado> (vector_traslados, 1);
-        estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
+        estadisticas_ciudades = new int[cantCiudades][4];
         for (int i = 0; i < cantCiudades; i++){
-            ArrayList<ArrayList<Integer>> a = new ArrayList<ArrayList<Integer>>();
-            a.set(i,a.get(0)set();
-
+            estadisticas_ciudades[i][0] = i;
+            estadisticas_ciudades[i][1] = 0;
+            estadisticas_ciudades[i][2] = 0;
+            estadisticas_ciudades[i][3] = i;
+           ciudades_mayor_ganancia.add(i);
+           ciudades_mayor_perdida.add(i);
         }
-        
+        heap_ciudades_mayor_superavit(estadisticas_ciudades);
+
+
         heap_ciudades_mayor_superavit = new Heap <ArrayList<Integer>>(2);
         }
 
     public void registrarTraslados(Traslado[] traslados){
-        // Implementar
+        for (int i = 0; i < traslados.length; i++){
+            vector_traslados.add(traslados[i]);
+            heap_pedidos_por_ganancia.encolar(traslados[i]);
+            
+        }
     }
 
     public int[] despacharMasRedituables(int n){
