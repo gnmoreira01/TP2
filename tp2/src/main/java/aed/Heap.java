@@ -37,6 +37,10 @@ public class Heap<T> {
         }
     }
 
+    public int longitud(){
+        return longitud;
+    }
+
     public void encolar (T elem){
         if (atributo_array.size() == 0){
             atributo_array.add(elem);

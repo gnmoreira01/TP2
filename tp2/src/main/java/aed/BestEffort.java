@@ -68,8 +68,8 @@ public class BestEffort {
         }
         else{
             for (int i = 0; i<n;i++){
-                int id_pedido = heap_pedidos_por_ganancia.desencolar();
-                ids[i] = id_pedido;
+                Traslado id_pedido = heap_pedidos_por_ganancia.desencolar();
+                ids[i] = id_pedido.id();
             }
             heap_pedidos_por_antiguedad.eliminarPorIndice(n)
         }
