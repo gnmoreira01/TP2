@@ -153,7 +153,7 @@ public class BestEffort {
     }
     
     public int ciudadConMayorSuperavit(){
-        heap_ciudades_mayor_superavit.
+        return heap_ciudades_mayor_superavit.consultarIDdelMax();
     }
 
     public ArrayList<Integer> ciudadesConMayorGanancia(){
