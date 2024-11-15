@@ -110,7 +110,7 @@ public class Heap<T> {
             }
             else{
                 ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
-                return a.get(i).get(3);
+                return a.get(i).get(2);
             }
         }
     }
@@ -120,8 +120,15 @@ public class Heap<T> {
             ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
             return a.get(i).id();
         }
+        else if(tipo== 1){
+            ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
+            return a.get(i).id();
+            //Nota: En realidad no nos interesa que haya un criterio de desmpate para translado más antiguo, ya que los timestamp nunca pueden ser iguales. 
+            //Pero, como tambien la usamos para devolver los IDS a la hora de despachar, utilizamos el ID como "segundo criterio".
+        }    
         else{
-            return i;
+            ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
+            return a.get(i).get(4);
         }
     }
 
