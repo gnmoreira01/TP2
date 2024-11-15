@@ -62,16 +62,6 @@ public class Heap<T> {
             }
         }
     }
-
-
-    private T hijoizquierdo (int i){
-        return atributo_array.get(2*i+1);
-    }
-
-    private T hijoderecho (int i){
-        return atributo_array.get(2*i+2);
-    }
-
     public void desencolar(){
         eliminarPorIndice(0);
     }
