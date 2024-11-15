@@ -17,7 +17,6 @@ public class BestEffort {
      * superávit e ID
      */
 
-
     public BestEffort(int cantCiudades, Traslado[] traslados){
         cantidad_pedidos_despachados = 0;
         ganancia_global = 0;
@@ -63,6 +62,7 @@ public class BestEffort {
             }
         }
     }
+    
     public int[] despacharMasRedituables(int n){
         if(n > heap_pedidos_por_ganancia.longitud()){
             n = heap_pedidos_por_ganancia.longitud();
@@ -91,7 +91,6 @@ public class BestEffort {
         }
     }
 
-    
     public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
         int [] ids = new int[cantDespachos];
         for (int i = 0; i < cantDespachos; i++){
@@ -146,7 +145,8 @@ public class BestEffort {
         }
         return ids;
     }
-    private int NuevoAtributoMaximo (int c, int atributo, ArrayList<Integer> arr){
+    
+    private int comparacionConElMaximo (int c, int atributo, ArrayList<Integer> arr){
         ArrayList <Integer> ciudad = estadisticas_ciudades.get(c);
         ArrayList <Integer> ciudad_referencia = estadisticas_ciudades.get(arr.get(0));
         return (ciudad.get(atributo).compareTo(ciudad_referencia.get(atributo)));
