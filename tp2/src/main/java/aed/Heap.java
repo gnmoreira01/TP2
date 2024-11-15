@@ -139,7 +139,7 @@ public class Heap<T> {
         return this.valor_i (2*i+2);
     }
 
-private void heapify_aux (int i){
+    private void heapify_aux (int i){
         if (2*i+2 < longitud){
             int padre = this.valor_i(i);
             int hijoIzq = 2*i+1;
