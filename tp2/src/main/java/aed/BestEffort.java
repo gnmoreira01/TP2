@@ -9,7 +9,7 @@ public class BestEffort {
     private Heap<ArrayList<Integer>> heap_ciudades_mayor_superavit;
     private int cantidad_pedidos_despachados;
     private int ganancia_global;
-    private int [] [] estadisticas_ciudades;
+    private ArrayList<ArrayList<Integer>> estadisticas_ciudades;
     private ArrayList<Integer> ciudades_mayor_ganancia;
     private ArrayList<Integer> ciudades_mayor_perdida;
 
@@ -30,26 +30,32 @@ public class BestEffort {
         }
         heap_pedidos_por_ganancia = new Heap<Traslado>(vector_traslados, 0);
         heap_pedidos_por_antiguedad = new Heap <Traslado> (vector_traslados, 1);
-        estadisticas_ciudades = new int[cantCiudades][4];
+        estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < cantCiudades; i++){
-            estadisticas_ciudades[i][0] = i;
-            estadisticas_ciudades[i][1] = 0;
-            estadisticas_ciudades[i][2] = 0;
-            estadisticas_ciudades[i][3] = i;
+           ArrayList<Integer> ciudad = new ArrayList<Integer>(); 
+           ciudad.add(0);
+           ciudad.add(0); 
+           ciudad.add(0); 
+           ciudad.add(i);
+           ciudad.add(i);
+           estadisticas_ciudades.add(ciudad);
            ciudades_mayor_ganancia.add(i);
            ciudades_mayor_perdida.add(i);
         }
-        heap_ciudades_mayor_superavit(estadisticas_ciudades);
-
-
-        heap_ciudades_mayor_superavit = new Heap <ArrayList<Integer>>(2);
+        heap_ciudades_mayor_superavit = new Heap<ArrayList<Integer>>(estadisticas_ciudades,2);
         }
 
-    public void registrarTraslados(Traslado[] traslados){
-        for (int i = 0; i < traslados.length; i++){
-            vector_traslados.add(traslados[i]);
-            heap_pedidos_por_ganancia.encolar(traslados[i]);
-            
+        public void modificarArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
+            array.get(ciudad).set(atributoDeCiudad, valor);
+        }
+
+    public void registrarTraslados(Traslado[] nuevos_traslados){
+        if (nuevos_traslados.length != 0){
+            for (int i = 0; i < nuevos_traslados.length; i++){
+                vector_traslados.add(nuevos_traslados[i]);
+                heap_pedidos_por_ganancia.encolar(nuevos_traslados[i]);
+                heap_pedidos_por_antiguedad.encolar(nuevos_traslados[i]);
+            }
         }
     }
 
@@ -69,20 +75,15 @@ public class BestEffort {
     }
 
     public ArrayList<Integer> ciudadesConMayorGanancia(){
-        if (cantidad_pedidos_despachados == 0){
-            return 
-        }
-        return null;
+        return ciudades_mayor_ganancia;
     }
 
     public ArrayList<Integer> ciudadesConMayorPerdida(){
-        // Implementar
-        return null;
+        return ciudades_mayor_perdida;
     }
 
-    public int gananciaPromedioPorTraslado(){
-        // Implementar
-        return 0;
+    public int gananciaPromedioPorTraslado(){ 
+        return ganancia_global/cantidad_pedidos_despachados;
     }
     
 }
