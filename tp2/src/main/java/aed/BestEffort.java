@@ -13,10 +13,9 @@ public class BestEffort {
     private ArrayList<Integer> ciudades_mayor_ganancia;
     private ArrayList<Integer> ciudades_mayor_perdida;
 
-    /* estadisticas_ciudades es un vector de vectores con 4 posiciones, las cuales son ganancia, pérdida, superávit y posicion en el heap de
-     * superávit.
+    /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son ganancia, pérdida, superávit y posicion en el heap de
+     * superávit y ID.
      */
-
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
         cantidad_pedidos_despachados = 0;
