@@ -70,33 +70,39 @@ public class BestEffort {
             return ids;
         }
         else{
-            for (int i = 0; i<n && i < heap_pedidos_por_ganancia.longitud() ;i++){
-                Traslado pedido = heap_pedidos_por_ganancia.desencolar();
-                int ganancia_pedido = pedido.ganancia();
-                int perdida_pedido = ganancia_pedido;
-                int ciudad_origen = pedido.origen();
-                int ciudad_destino = pedido.destino();
-                aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
-                aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
-                if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
-                    ciudades_mayor_ganancia.add(ciudad_origen);
-                }
-                else if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0)
-                    ciudades_mayor_ganancia = new ArrayList<Integer>();
-                    ciudades_mayor_ganancia.add(ciudad_origen);
-                if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
-                    ciudades_mayor_perdida.add(ciudad_destino);
-                }
-                else if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
-                    ciudades_mayor_perdida = new ArrayList<Integer>();
-                    ciudades_mayor_perdida.add(ciudad_origen);
-                }
-                cantidad_pedidos_despachados+= 1;
-                ganancia_global+= ganancia_pedido;
-                ids[i] = pedido.id();
-                heap_pedidos_por_antiguedad.eliminarPorIndice(pedido.pos_heap_antiguedad);
-            }
+            ids = despacho(heap_pedidos_por_ganancia,n);
+            
         }
+    }
+
+    public int [] despacho(Heap<Traslado> heap,int n){
+        int [] ids = new int[n];
+        for (int i = 0; i<n && i < heap.longitud() ;i++){
+            Traslado pedido = heap.desencolar();
+            int ganancia_pedido = pedido.ganancia();
+            int perdida_pedido = ganancia_pedido;
+            int ciudad_origen = pedido.origen();
+            int ciudad_destino = pedido.destino();
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
+            if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
+                ciudades_mayor_ganancia.add(ciudad_origen);
+            }
+            else if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0)
+                ciudades_mayor_ganancia = new ArrayList<Integer>();
+                ciudades_mayor_ganancia.add(ciudad_origen);
+            if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
+                ciudades_mayor_perdida.add(ciudad_destino);
+            }
+            else if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
+                ciudades_mayor_perdida = new ArrayList<Integer>();
+                ciudades_mayor_perdida.add(ciudad_origen);
+            }
+            cantidad_pedidos_despachados+= 1;
+            ganancia_global+= ganancia_pedido;
+            ids[i] = pedido.id();
+        }
+        return ids;
     }
 
     private int NuevoAtributoMaximo (int c, int atributo, ArrayList<Integer> arr){
