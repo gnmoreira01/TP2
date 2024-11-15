@@ -48,7 +48,7 @@ public class Heap<T> {
         }  
         else{
             atributo_array.add(elem);
-            longitud+=1;
+            longitud += 1;
             double a = Math.floor((longitud-2)/2);
             int indice_padre = (int) a;
             int k = longitud - 1;
