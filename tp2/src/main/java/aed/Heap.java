@@ -74,6 +74,10 @@ public class Heap<T> {
         }
         return id_eliminado;
     }
+
+    public int consultarIDdelMax(){
+        return valorSegundoCriterio_i(0);
+    }
     
     private int valor_i (int i){
         if (tipo == 0){
