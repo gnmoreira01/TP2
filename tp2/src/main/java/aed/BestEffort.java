@@ -52,6 +52,8 @@ public class BestEffort {
     public void registrarTraslados(Traslado[] nuevos_traslados){
         if (nuevos_traslados.length != 0){
             for (int i = 0; i < nuevos_traslados.length; i++){
+                int indice = vector_traslados.size();
+                nuevos_traslados[i].añadir_indice(indice);
                 vector_traslados.add(nuevos_traslados[i]);
                 heap_pedidos_por_ganancia.encolar(nuevos_traslados[i]);
                 heap_pedidos_por_antiguedad.encolar(nuevos_traslados[i]);
@@ -69,6 +71,7 @@ public class BestEffort {
                 int id_pedido = heap_pedidos_por_ganancia.desencolar();
                 ids[i] = id_pedido;
             }
+            heap_pedidos_por_antiguedad.eliminarPorIndice(n)
         }
     }
 

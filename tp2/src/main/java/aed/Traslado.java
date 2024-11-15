@@ -16,7 +16,7 @@ public class Traslado {
         this.destino = destino;
         this.gananciaNeta = gananciaNeta;
         this.timestamp = timestamp;
-        //this.antiguedad = null;
+        this.indice = 0;
     }
 
     public int ganancia (){
