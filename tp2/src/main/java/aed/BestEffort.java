@@ -57,6 +57,7 @@ public class BestEffort {
             for (int i = 0; i < nuevos_traslados.length; i++){
                 int indice = vector_traslados.size();
                 nuevos_traslados[i].añadir_indice(indice);
+                nuevos_traslados[i].negar_timestamp();
                 vector_traslados.add(nuevos_traslados[i]);
                 heap_pedidos_por_ganancia.encolar(nuevos_traslados[i]);
                 heap_pedidos_por_antiguedad.encolar(nuevos_traslados[i]);
