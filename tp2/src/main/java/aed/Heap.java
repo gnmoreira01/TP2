@@ -61,18 +61,22 @@ public class Heap<T> {
             }
         }
     }
-    public int desencolar(){
+    public T desencolar(){
         return eliminarPorIndice(0);
     }
 
-    public int eliminarPorIndice(int pos){
+    public T eliminarPorIndice(int pos){
         swap(pos,longitud-1);
-        int id_eliminado = valorSegundoCriterio_i(longitud-1);
+        T eliminado = atributo_array.get(longitud-1);
         longitud--;
         if(longitud > 0){
             heapify(pos);
         }
-        return id_eliminado;
+        return eliminado;
+    }
+
+    public int consultarIDdelMax(){
+        return valorSegundoCriterio_i(0);
     }
     
     private int valor_i (int i){
