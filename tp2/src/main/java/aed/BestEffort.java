@@ -77,14 +77,32 @@ public class BestEffort {
                 int ciudad_origen = pedido.origen();
                 int ciudad_destino = pedido.destino();
                 aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
-                int ganancia_ciudad_origen = estadisticas_ciudades.get(ciudad_origen).get(0);
                 aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
-                if (ganancia_ciudad_origen > estadisticas_ciudades.getciudades_mayor_ganancia.get(0))
-                int perdida_ciudad_destino = estadisticas_ciudades.get(ciudad_origen).get(0);
+                if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
+                    ciudades_mayor_ganancia.add(ciudad_origen);
+                }
+                else if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0)
+                    ciudades_mayor_ganancia = new ArrayList<Integer>();
+                    ciudades_mayor_ganancia.add(ciudad_origen);
+                if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
+                    ciudades_mayor_perdida.add(ciudad_destino);
+                }
+                else if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
+                    ciudades_mayor_perdida = new ArrayList<Integer>();
+                    ciudades_mayor_perdida.add(ciudad_origen);
+                }
+                cantidad_pedidos_despachados+= 1;
+                ganancia_global+= ganancia_pedido;
                 ids[i] = pedido.id();
+                heap_pedidos_por_antiguedad.eliminarPorIndice(pedido.pos_heap_antiguedad);
             }
-            heap_pedidos_por_antiguedad.eliminarPorIndice(n)
         }
+    }
+
+    private int NuevoAtributoMaximo (int c, int atributo, ArrayList<Integer> arr){
+        ArrayList <Integer> ciudad = estadisticas_ciudades.get(c);
+        ArrayList <Integer> ciudad_referencia = estadisticas_ciudades.get(arr.get(0));
+        return (ciudad.get(atributo).compareTo(ciudad_referencia.get(atributo)));
     }
 
     public int[] despacharMasAntiguos(int n){
