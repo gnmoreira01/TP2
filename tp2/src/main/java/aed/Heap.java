@@ -78,6 +78,10 @@ public class Heap<T> {
     public int consultarIDdelMax(){
         return valorSegundoCriterio_i(0);
     }
+
+    public int consultarIDdelMax(){
+        return valorSegundoCriterio_i(0);
+    }
     
     private int valor_i (int i){
         if (tipo == 0){
