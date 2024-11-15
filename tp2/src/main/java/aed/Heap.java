@@ -66,7 +66,7 @@ public class Heap<T> {
         eliminarPorIndice(0);
     }
 
-    private void eliminarPorIndice(int pos){
+    public void eliminarPorIndice(int pos){
         swap(pos,longitud-1);
         longitud--;
         if(longitud > 0){
