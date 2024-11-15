@@ -54,9 +54,8 @@ public class Heap<T> {
             int k = longitud - 1;
             while ((this.valor_i(indice_padre) <= this.valor_i(k)) && k!= 0){
                 if((this.valor_i(indice_padre) < this.valor_i(k)) || menorSegunElSegundoCriterio(k,indice_padre)){
-                    int ind_pad = (int) indice_padre;
-                    this.swap(ind_pad,k);
-                    k = ind_pad;
+                    this.swap(indice_padre,k);
+                    k = indice_padre;
                     indice_padre = (int) Math.floor((k-1)/2);
                 }
                 else{
