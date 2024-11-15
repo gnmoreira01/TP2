@@ -43,11 +43,14 @@ public class BestEffort {
            ciudades_mayor_perdida.add(i);
         }
         heap_ciudades_mayor_superavit = new Heap<ArrayList<Integer>>(estadisticas_ciudades,2);
-        }
+    }
 
-        public void modificarArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
-            array.get(ciudad).set(atributoDeCiudad, valor);
-        }
+    public void aumentarElemArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
+        ArrayList<Integer> elem_ciudad = array.get(ciudad);
+        int valor_viejo = elem_ciudad.get(atributoDeCiudad);
+        elem_ciudad.set(atributoDeCiudad, valor_viejo + valor);
+
+    }
 
     public void registrarTraslados(Traslado[] nuevos_traslados){
         if (nuevos_traslados.length != 0){
@@ -67,9 +70,18 @@ public class BestEffort {
             return ids;
         }
         else{
-            for (int i = 0; i<n;i++){
-                Traslado id_pedido = heap_pedidos_por_ganancia.desencolar();
-                ids[i] = id_pedido.id();
+            for (int i = 0; i<n && i < heap_pedidos_por_ganancia.longitud() ;i++){
+                Traslado pedido = heap_pedidos_por_ganancia.desencolar();
+                int ganancia_pedido = pedido.ganancia();
+                int perdida_pedido = ganancia_pedido;
+                int ciudad_origen = pedido.origen();
+                int ciudad_destino = pedido.destino();
+                aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
+                int ganancia_ciudad_origen = estadisticas_ciudades.get(ciudad_origen).get(0);
+                aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
+                if (ganancia_ciudad_origen > estadisticas_ciudades.getciudades_mayor_ganancia.get(0))
+                int perdida_ciudad_destino = estadisticas_ciudades.get(ciudad_origen).get(0);
+                ids[i] = pedido.id();
             }
             heap_pedidos_por_antiguedad.eliminarPorIndice(n)
         }
