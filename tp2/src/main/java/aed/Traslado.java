@@ -59,11 +59,11 @@ public class Traslado {
         this.indice = i;
     }
 
-    public void añadir_pos_heap_ganancia(int i){
+    public void cambiar_pos_heap_ganancia(int i){
         this.pos_heap_ganancia = i;
     }
 
-    public void añadir_pos_heap_antiguedad(int i){
+    public void cambiar_pos_heap_antiguedad(int i){
         this.pos_heap_ganancia = i;
     }
 }

@@ -23,11 +23,11 @@ public class Heap<T> {
         for (int i = longitud - 1; i > -1; i--){
             if (tipo == 0){
                 ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-                a.get(i).añadir_pos_heap_ganancia(i);
+                a.get(i).cambiar_pos_heap_ganancia(i);
             }  
             else if (tipo == 1){
                 ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-                a.get(i).añadir_pos_heap_antiguedad(i);
+                a.get(i).cambiar_pos_heap_antiguedad(i);
             }
             else{
                 ArrayList<ArrayList<Integer>> a = (ArrayList<ArrayList<Integer>>) atributo_array;
@@ -48,15 +48,14 @@ public class Heap<T> {
         }  
         else{
             atributo_array.add(elem);
-            longitud+=1;
+            longitud += 1;
             double a = Math.floor((longitud-2)/2);
             int indice_padre = (int) a;
             int k = longitud - 1;
             while ((this.valor_i(indice_padre) <= this.valor_i(k)) && k!= 0){
                 if((this.valor_i(indice_padre) < this.valor_i(k)) || menorSegunElSegundoCriterio(k,indice_padre)){
-                    int ind_pad = (int) indice_padre;
-                    this.swap(ind_pad,k);
-                    k = ind_pad;
+                    this.swap(indice_padre,k);
+                    k = indice_padre;
                     indice_padre = (int) Math.floor((k-1)/2);
                 }
                 else{
@@ -188,14 +187,14 @@ public class Heap<T> {
         if (tipo == 0){
             Traslado ielem = (Traslado) elem_i;
             Traslado kelem = (Traslado) elem_i;
-            ielem.añadir_pos_heap_ganancia(k);
-            kelem.añadir_pos_heap_ganancia(i);
+            ielem.cambiar_pos_heap_ganancia(k);
+            kelem.cambiar_pos_heap_ganancia(i);
         }
         else if (tipo == 1){
             Traslado ielem = (Traslado) elem_i;
             Traslado kelem = (Traslado) elem_i;
-            ielem.añadir_pos_heap_antiguedad(k);
-            kelem.añadir_pos_heap_antiguedad(i);
+            ielem.cambiar_pos_heap_antiguedad(k);
+            kelem.cambiar_pos_heap_antiguedad(i);
         }
         else{
             ArrayList<Integer> ielem = (ArrayList<Integer>) elem_i;
