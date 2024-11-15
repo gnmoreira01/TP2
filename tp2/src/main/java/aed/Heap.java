@@ -33,9 +33,8 @@ public class Heap<T> {
                 ArrayList<ArrayList<Integer>> a = (ArrayList<ArrayList<Integer>>) atributo_array;
                 a.get(i).set(3,i);
             }
-            heapify_aux(i);
+            heapify(i);
         }
-
     }
 
     public void encolar (T elem){
@@ -62,30 +61,18 @@ public class Heap<T> {
             }
         }
     }
-    public void desencolar(){
-        eliminarPorIndice(0);
+    public int desencolar(){
+        return eliminarPorIndice(0);
     }
 
-    public void eliminarPorIndice(int pos){
+    public int eliminarPorIndice(int pos){
         swap(pos,longitud-1);
+        int id_eliminado = valorSegundoCriterio_i(longitud-1);
         longitud--;
         if(longitud > 0){
-            int actual = pos;
-            int valorAntesDelHeapify = valor_i(pos);
-            int segundoValorAntesDelHeapify = valorSegundoCriterio_i(pos); 
-            while(actual*2+1 < longitud){
-                heapify_aux(actual);
-                if((valorAntesDelHeapify == valor_i(actual)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual))){
-                    return;
-                }
-                else if((valorAntesDelHeapify == valor_i(actual*2+1)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual*2+1))){
-                    actual = actual*2+1;
-                }
-                else{
-                    actual = actual*2+2;
-                }
-            }
+            heapify(pos);
         }
+        return id_eliminado;
     }
     
     private int valor_i (int i){
@@ -137,6 +124,24 @@ public class Heap<T> {
 
     private int valor_hijo_derecho (int i){
         return this.valor_i (2*i+2);
+    }
+
+    private void heapify (int pos){
+        int actual = pos;
+        int valorAntesDelHeapify = valor_i(pos);
+        int segundoValorAntesDelHeapify = valorSegundoCriterio_i(pos); 
+        while(actual*2+1 < longitud){
+            heapify_aux(actual);
+            if((valorAntesDelHeapify == valor_i(actual)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual))){
+                return;
+            }
+            else if((valorAntesDelHeapify == valor_i(actual*2+1)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual*2+1))){
+                actual = actual*2+1;
+            }
+            else{
+                actual = actual*2+2;
+            }
+        }
     }
 
     private void heapify_aux (int i){

@@ -13,9 +13,10 @@ public class BestEffort {
     private ArrayList<Integer> ciudades_mayor_ganancia;
     private ArrayList<Integer> ciudades_mayor_perdida;
 
-    /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son ganancia, pérdida, superávit y posicion en el heap de
-     * superávit y ID.
+    /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son ganancia, pérdida, superávit, posicion en el heap de
+     * superávit e ID
      */
+
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
         cantidad_pedidos_despachados = 0;
@@ -24,7 +25,7 @@ public class BestEffort {
         ciudades_mayor_perdida = new ArrayList<Integer>();
         for (int i = 0; i < traslados.length; i++){
             traslados[i].añadir_indice(i);
-            traslados[i].negar_timestamp(); //Esto es solo para convertirlo en un max-heap más facilmente.
+            traslados[i].negar_timestamp(); //Esto es solo para poder usar el heap de antiguedad como9 un max-heap.
             vector_traslados.add(traslados[i]);
         }
         heap_pedidos_por_ganancia = new Heap<Traslado>(vector_traslados, 0);
@@ -59,8 +60,16 @@ public class BestEffort {
     }
 
     public int[] despacharMasRedituables(int n){
-        // Implementar
-        return null;
+        int [] ids = new int[n];
+        if (n==0 || vector_traslados.size()==0){
+            return ids;
+        }
+        else{
+            for (int i = 0; i<n;i++){
+                int id_pedido = heap_pedidos_por_ganancia.desencolar();
+                ids[i] = id_pedido;
+            }
+        }
     }
 
     public int[] despacharMasAntiguos(int n){
