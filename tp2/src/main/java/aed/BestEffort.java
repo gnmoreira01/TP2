@@ -22,6 +22,7 @@ public class BestEffort {
         ganancia_global = 0;
         ciudades_mayor_ganancia = new ArrayList<Integer> ();
         ciudades_mayor_perdida = new ArrayList<Integer>();
+        vector_traslados = new ArrayList<Traslado>();
         for (int i = 0; i < traslados.length; i++){
             traslados[i].añadir_indice(i);
             traslados[i].negar_timestamp(); //Esto es solo para poder usar el heap de antiguedad como9 un max-heap.

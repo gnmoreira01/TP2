@@ -156,8 +156,8 @@ public class Heap<T> {
             int padre = this.valor_i(i);
             int hijoIzq = 2*i+1;
             int hijoDer = 2*i+2;
-            int valorHijoIzq = this.valor_hijo_izquierdo(hijoIzq);
-            int valorHijoDer = this.valor_hijo_derecho(hijoDer);            
+            int valorHijoIzq = this.valor_hijo_izquierdo(i);
+            int valorHijoDer = this.valor_hijo_derecho(i);            
             if (!esMayorQueLosHijos(padre, valorHijoIzq, valorHijoDer)){
                 if (valorHijoIzq > valorHijoDer || ((valorHijoIzq == valorHijoDer) && menorSegunElSegundoCriterio(hijoIzq, hijoDer))){
                     if((valorHijoIzq > padre) || (((valorHijoIzq == padre) && menorSegunElSegundoCriterio(hijoIzq, i)))){
@@ -174,7 +174,7 @@ public class Heap<T> {
         else if (2*i+1 < longitud){
             int padre = this.valor_i(i);
             int hijoIzq = 2*i+1;
-            int valorHijoIzq = this.valor_hijo_izquierdo(hijoIzq);
+            int valorHijoIzq = this.valor_hijo_izquierdo(i);
             if ((padre < valorHijoIzq) || ((padre == valorHijoIzq) && (menorSegunElSegundoCriterio(hijoIzq, i)))){
                 this.swap(i, 2*i+1);
             }
