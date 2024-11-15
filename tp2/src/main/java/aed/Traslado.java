@@ -16,7 +16,6 @@ public class Traslado {
         this.destino = destino;
         this.gananciaNeta = gananciaNeta;
         this.timestamp = timestamp;
-        this.indice = 0;
     }
 
     public int ganancia (){
@@ -43,20 +42,12 @@ public class Traslado {
         timestamp = (-1) * timestamp;
     }
 
-    public int indice (){
-        return indice;
-    }
-
     public int pos_heap_ganancia(){
         return pos_heap_ganancia;
     }
 
     public int pos_heap_antiguedad(){
         return pos_heap_antiguedad;
-    }
-
-    public void añadir_indice (int i){
-        this.indice = i;
     }
 
     public void cambiar_pos_heap_ganancia(int i){
