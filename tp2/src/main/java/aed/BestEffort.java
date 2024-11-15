@@ -63,62 +63,97 @@ public class BestEffort {
             }
         }
     }
-
     public int[] despacharMasRedituables(int n){
+        if(n > heap_pedidos_por_ganancia.longitud()){
+            n = heap_pedidos_por_ganancia.longitud();
+        }
         int [] ids = new int[n];
-        if (n==0 || vector_traslados.size()==0){
+        if (n == 0){
             return ids;
         }
         else{
-            ids = despacho(heap_pedidos_por_ganancia,n);
-            
+            ids = despacho(heap_pedidos_por_ganancia,n,0);   
+            return ids;
         }
     }
 
-    public int [] despacho(Heap<Traslado> heap,int n){
+    public int[] despacharMasAntiguos(int n){
+        if(n > heap_pedidos_por_ganancia.longitud()){
+            n = heap_pedidos_por_ganancia.longitud();
+        }
         int [] ids = new int[n];
-        for (int i = 0; i<n && i < heap.longitud() ;i++){
-            Traslado pedido = heap.desencolar();
+        if (n == 0){
+            return ids;
+        }
+        else{
+            ids = despacho(heap_pedidos_por_ganancia,n,1);   
+            return ids;
+        }
+    }
+
+    
+    public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
+        int [] ids = new int[cantDespachos];
+        for (int i = 0; i < cantDespachos; i++){
+            Traslado pedido = heapDespachado.desencolar();
             int ganancia_pedido = pedido.ganancia();
             int perdida_pedido = ganancia_pedido;
             int ciudad_origen = pedido.origen();
             int ciudad_destino = pedido.destino();
             aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,2,ganancia_pedido);
             aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
-            if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,2,(-perdida_pedido));
+            if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
                 ciudades_mayor_ganancia.add(ciudad_origen);
             }
-            else if (NuevoAtributoMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0)
+            else if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0)
                 ciudades_mayor_ganancia = new ArrayList<Integer>();
+                //se supero el maximo, se elimina todos los IDs anteriormente guardados.
                 ciudades_mayor_ganancia.add(ciudad_origen);
-            if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
+            if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
                 ciudades_mayor_perdida.add(ciudad_destino);
             }
-            else if (NuevoAtributoMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
+            else if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
                 ciudades_mayor_perdida = new ArrayList<Integer>();
+                //se supero el maximo, se elimina todos los IDs anteriormente guardados.
                 ciudades_mayor_perdida.add(ciudad_origen);
             }
+
+            //Actualio las variables goblales y guardo el ID del pedido recién desencolado.
+
             cantidad_pedidos_despachados+= 1;
             ganancia_global+= ganancia_pedido;
             ids[i] = pedido.id();
+
+            //Si es del tipo 0 es el heap por ganancia, asi que me falta actualizar el heap antiguedad.
+            //Para ello eliminare por indice en dicho heap. Misma lógica para el tipo 1, pero al revés.
+            if(tipo == 0){
+                heap_pedidos_por_antiguedad.eliminarPorIndice(pedido.pos_heap_antiguedad);
+            }
+
+            else{
+                heap_pedidos_por_ganancia.eliminarPorIndice(pedido.pos_heap_ganancia);
+            }
+
+            //Tengo que "actualizar" el heap Superavit, ya que han cambiado los valores de dos nodos.
+            //Para ello elimino en el heap dichos valores y los vuelvo a encoar (Para que la comparación se realice con el valor modificado)
+
+            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_destino)).get(3));
+            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_origen)).get(3));
+            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_destino));
+            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_origen));
         }
         return ids;
     }
-
     private int NuevoAtributoMaximo (int c, int atributo, ArrayList<Integer> arr){
         ArrayList <Integer> ciudad = estadisticas_ciudades.get(c);
         ArrayList <Integer> ciudad_referencia = estadisticas_ciudades.get(arr.get(0));
         return (ciudad.get(atributo).compareTo(ciudad_referencia.get(atributo)));
     }
-
-    public int[] despacharMasAntiguos(int n){
-        // Implementar
-        return null;
-    }
-
+    
     public int ciudadConMayorSuperavit(){
-        // Implementar
-        return 0;
+        heap_ciudades_mayor_superavit.
     }
 
     public ArrayList<Integer> ciudadesConMayorGanancia(){
