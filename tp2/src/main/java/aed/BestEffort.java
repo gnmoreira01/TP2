@@ -1,222 +1,172 @@
 package aed;
-import java.sql.Array;
+
 import java.util.ArrayList;
 
-public class Heap<T> {
-    private ArrayList<T> atributo_array ;
-    private int longitud;
-    private int tipo;
-    /* tipo = 0 equivale a max-heap por ganancia, i = 1 min-heap por antiguedad e
-    i = 2 max-heap de ciudades por superávit */
+public class BestEffort {
+    private Heap<Traslado> heap_pedidos_por_ganancia;
+    private Heap<Traslado> heap_pedidos_por_antiguedad;
+    private Heap<ArrayList<Integer>> heap_ciudades_mayor_superavit;
+    private int cantidad_pedidos_despachados;
+    private int ganancia_global;
+    private ArrayList<ArrayList<Integer>> estadisticas_ciudades;
+    private ArrayList<Integer> ciudades_mayor_ganancia;
+    private ArrayList<Integer> ciudades_mayor_perdida;
 
+    /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son ganancia, pérdida, superávit, posicion en el heap de
+     * superávit e ID
+     */
 
-    // El tema de actualizar los otros heaps al despachar lo solucionamos haciendo eliminar y encolar, solo queda 2 log n en vez de log n, lo cual es lo mismo en el O().
-    public Heap (int i){
-        atributo_array = new ArrayList<T>();
-        tipo = i;
-    }
-
-    public Heap (ArrayList<T> array, int t){
-        longitud = array.size();
-        tipo = t;
-        atributo_array = new ArrayList<>(array);
-        //Me parece que acá se explican los problemas que tuvimos de que los heaps se modificabana simultaneamente: Estamos creando sobre el mismo array el atributo, y le estamos poniendo en ambos casos una referencia al susodicho.
-        //Si le colocaramos un new estariamos haciendo una nueva lista de referencias hacia a los objetos.
-        for (int i = longitud - 1; i > -1; i--){
-            if (tipo == 0){
-                ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-                a.get(i).cambiar_pos_heap_ganancia(i);
-            }  
-            else if (tipo == 1){
-                ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-                a.get(i).cambiar_pos_heap_antiguedad(i);
-            }
-            else{
-                ArrayList<ArrayList<Integer>> a = (ArrayList<ArrayList<Integer>>) atributo_array;
-                a.get(i).set(3,i);
-            }
-            heapify(i);
+    public BestEffort(int cantCiudades, Traslado[] traslados){
+        cantidad_pedidos_despachados = 0;
+        ganancia_global = 0;
+        ciudades_mayor_ganancia = new ArrayList<Integer> ();
+        ciudades_mayor_perdida = new ArrayList<Integer>();
+        ArrayList<Traslado> vectorTraslados = new ArrayList<Traslado>();
+        for (int i = 0; i < traslados.length; i++){
+            vectorTraslados.add(traslados[i]);
+            traslados[i].negar_timestamp();
+            traslados[i].cambiar_pos_heap_antiguedad(i);
+            traslados[i].cambiar_pos_heap_ganancia(i); //Esto es solo para poder usar el heap de antiguedad como9 un max-heap.
         }
+        heap_pedidos_por_ganancia = new Heap<Traslado>(vectorTraslados, 0);
+        heap_pedidos_por_antiguedad = new Heap <Traslado> (vectorTraslados,1);
+        estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < cantCiudades; i++){
+           ArrayList<Integer> ciudad = new ArrayList<Integer>(); 
+           ciudad.add(0);
+           ciudad.add(0); 
+           ciudad.add(0); 
+           ciudad.add(i);
+           ciudad.add(i);
+           estadisticas_ciudades.add(ciudad);
+           ciudades_mayor_ganancia.add(i);
+           ciudades_mayor_perdida.add(i);
+        }
+        heap_ciudades_mayor_superavit = new Heap<ArrayList<Integer>>(estadisticas_ciudades,2);
     }
 
-    public int longitud(){
-        return longitud;
+    public void aumentarElemArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
+        ArrayList<Integer> elem_ciudad = array.get(ciudad);
+        int valor_viejo = elem_ciudad.get(atributoDeCiudad);
+        elem_ciudad.set(atributoDeCiudad, valor_viejo + valor);
+
     }
 
-    public void encolar (T elem){
-        if (atributo_array.size() == 0){
-            atributo_array.add(elem);
-            longitud += 1;
-        }  
-        else{
-            atributo_array.add(elem);
-            longitud += 1;
-            double a = Math.floor((longitud-2)/2);
-            int indice_padre = (int) a;
-            int k = longitud - 1;
-            while ((this.valor_i(indice_padre) <= this.valor_i(k)) && k!= 0){
-                if((this.valor_i(indice_padre) < this.valor_i(k)) || menorSegunElSegundoCriterio(k,indice_padre)){
-                    this.swap(indice_padre,k);
-                    k = indice_padre;
-                    indice_padre = (int) Math.floor((k-1)/2);
-                }
-                else{
-                    return;
-                }
-            }
-        }
-    }
-    public T desencolar(){
-        return eliminarPorIndice(0);
-    }
-
-    public T eliminarPorIndice(int pos){
-        swap(pos,longitud-1);
-        T eliminado = atributo_array.get(longitud-1);
-        if(tipo!=2){
-            atributo_array.remove(longitud-1);
-        }
-        longitud--;
-        if(longitud > 0 && pos < longitud){
-            heapify(pos);
-        }
-        return eliminado;
-    }
-
-    public int consultarIDdelMax(){
-        return valorSegundoCriterio_i(0);
-    }
-    
-    private int valor_i (int i){
-        if (tipo == 0){
-            ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-            return a.get(i).ganancia();
-        }
-        else{
-            if (tipo == 1){
-                ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-                return a.get(i).timestamp();
-            }
-            else{
-                ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
-                return a.get(i).get(2);
+    public void registrarTraslados(Traslado[] nuevos_traslados){
+        if (nuevos_traslados.length != 0){
+            for (int i = 0; i < nuevos_traslados.length; i++){
+                nuevos_traslados[i].negar_timestamp();
+                heap_pedidos_por_ganancia.encolar(nuevos_traslados[i]);
+                heap_pedidos_por_antiguedad.encolar(nuevos_traslados[i]);
             }
         }
     }
     
-    private int valorSegundoCriterio_i (int i){
-        if (tipo == 0){
-            ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-            return a.get(i).id();
+    public int[] despacharMasRedituables(int n){
+        if(n > heap_pedidos_por_ganancia.longitud()){
+            n = heap_pedidos_por_ganancia.longitud();
         }
-        else if(tipo== 1){
-            ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
-            return a.get(i).id();
-            //Nota: En realidad no nos interesa que haya un criterio de desmpate para translado más antiguo, ya que los timestamp nunca pueden ser iguales. 
-            //Pero, como tambien la usamos para devolver los IDS a la hora de despachar, utilizamos el ID como "segundo criterio".
-        }    
+        int [] ids = new int[n];
+        if (n == 0){
+            return ids;
+        }
         else{
-            ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
-            return a.get(i).get(4);
+            ids = despacho(heap_pedidos_por_ganancia,n,0);   
+            return ids;
         }
     }
 
-    private boolean menorSegunElSegundoCriterio(int i, int j){
-        if(valorSegundoCriterio_i(i) < valorSegundoCriterio_i(j)){
-            return true;
+    public int[] despacharMasAntiguos(int n){
+        if(n > heap_pedidos_por_antiguedad.longitud()){
+            n = heap_pedidos_por_antiguedad.longitud();
+        }
+        int [] ids = new int[n];
+        if (n == 0){
+            return ids;
         }
         else{
-            return false;
+            ids = despacho(heap_pedidos_por_antiguedad,n,1);   
+            return ids;
         }
+    }
+
+    public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
+        int [] ids = new int[cantDespachos];
+        for (int i = 0; i < cantDespachos; i++){
+            Traslado pedido = heapDespachado.desencolar();
+            int ganancia_pedido = pedido.ganancia();
+            int perdida_pedido = ganancia_pedido;
+            int ciudad_origen = pedido.origen();
+            int ciudad_destino = pedido.destino();
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,2,ganancia_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,2,(-perdida_pedido));
+            if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
+                ciudades_mayor_ganancia.add(ciudad_origen);
+            }
+            else if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0){
+                ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
+                nuevo_Ciudades.add(ciudad_origen);
+                //se supero el maximo, se elimina todos los IDs anteriormente guardados.
+                ciudades_mayor_ganancia = nuevo_Ciudades;
+            }   
+            if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
+                ciudades_mayor_perdida.add(ciudad_destino);
+            }
+            else if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
+                ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
+                nuevo_Ciudades.add(ciudad_destino);
+                //se supero el maximo, se elimina todos los IDs anteriormente guardados.
+                ciudades_mayor_perdida = nuevo_Ciudades;
+            }
+
+            //Actualio las variables goblales y guardo el ID del pedido recién desencolado.
+
+            cantidad_pedidos_despachados+= 1;
+            ganancia_global+= ganancia_pedido;
+            ids[i] = pedido.id();
+
+            //Si es del tipo 0 es el heap por ganancia, asi que me falta actualizar el heap antiguedad.
+            //Para ello eliminare por indice en dicho heap. Misma lógica para el tipo 1, pero al revés.
+            if(tipo == 0){
+                heap_pedidos_por_antiguedad.eliminarPorIndice(pedido.pos_heap_antiguedad);
+            }
+
+            else{
+                heap_pedidos_por_ganancia.eliminarPorIndice(pedido.pos_heap_ganancia);
+            }
+            //Tengo que "actualizar" el heap Superavit, ya que han cambiado los valores de dos nodos.
+            //Para ello elimino en el heap dichos valores y los vuelvo a encoar (Para que la comparación se realice con el valor modificado)
+
+            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_destino)).get(3));
+            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_destino));
+            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_origen)).get(3));
+            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_origen));
+        }
+        return ids;
     }
     
-    private int valor_hijo_izquierdo (int i){
-        return this.valor_i(2*i+1);
+    private int comparacionConElMaximo (int c, int atributo, ArrayList<Integer> arr){
+        ArrayList <Integer> ciudad = estadisticas_ciudades.get(c);
+        ArrayList <Integer> ciudad_referencia = estadisticas_ciudades.get(arr.get(0));
+        return (ciudad.get(atributo).compareTo(ciudad_referencia.get(atributo)));
+    }
+    
+    public int ciudadConMayorSuperavit(){
+        return heap_ciudades_mayor_superavit.consultarIDdelMax();
     }
 
-    private int valor_hijo_derecho (int i){
-        return this.valor_i (2*i+2);
+    public ArrayList<Integer> ciudadesConMayorGanancia(){
+        return ciudades_mayor_ganancia;
     }
 
-    private void heapify (int pos){
-        int actual = pos;
-        int valorAntesDelHeapify = valor_i(pos);
-        int segundoValorAntesDelHeapify = valorSegundoCriterio_i(pos); 
-        while(actual*2+1 < longitud){
-            heapify_aux(actual);
-            if((valorAntesDelHeapify == valor_i(actual)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual))){
-                return;
-            }
-            else if((valorAntesDelHeapify == valor_i(actual*2+1)) && (segundoValorAntesDelHeapify == valorSegundoCriterio_i(actual*2+1))){
-                actual = actual*2+1;
-            }
-            else{
-                actual = actual*2+2;
-            }
-        }
+    public ArrayList<Integer> ciudadesConMayorPerdida(){
+        return ciudades_mayor_perdida;
     }
 
-    private void heapify_aux (int i){
-        if (2*i+2 < longitud){
-            int padre = this.valor_i(i);
-            int hijoIzq = 2*i+1;
-            int hijoDer = 2*i+2;
-            int valorHijoIzq = this.valor_hijo_izquierdo(i);
-            int valorHijoDer = this.valor_hijo_derecho(i);            
-            if (!esMayorQueLosHijos(padre, valorHijoIzq, valorHijoDer)){
-                if (valorHijoIzq > valorHijoDer || ((valorHijoIzq == valorHijoDer) && menorSegunElSegundoCriterio(hijoIzq, hijoDer))){
-                    if((valorHijoIzq > padre) || (((valorHijoIzq == padre) && menorSegunElSegundoCriterio(hijoIzq, i)))){
-                        this.swap(i, 2*i+1);
-                    }
-                }
-                else{
-                    if((valorHijoDer > padre) || (((valorHijoDer == padre) && menorSegunElSegundoCriterio(hijoDer, i)))){
-                        this.swap(i,2*i+2);
-                    }
-                }
-            }
-        }
-        else if (2*i+1 < longitud){
-            int padre = this.valor_i(i);
-            int hijoIzq = 2*i+1;
-            int valorHijoIzq = this.valor_hijo_izquierdo(i);
-            if ((padre < valorHijoIzq) || ((padre == valorHijoIzq) && (menorSegunElSegundoCriterio(hijoIzq, i)))){
-                this.swap(i, 2*i+1);
-            }
-        }
+    public int gananciaPromedioPorTraslado(){ 
+        return ganancia_global/cantidad_pedidos_despachados;
     }
-
-    private void swap (int i, int k){
-        T elem_i = atributo_array.get(i);
-        T elem_k = atributo_array.get(k);
-        if (tipo == 0){
-            Traslado ielem = (Traslado) elem_i;
-            Traslado kelem = (Traslado) elem_k;
-            ielem.cambiar_pos_heap_ganancia(k);
-            kelem.cambiar_pos_heap_ganancia(i);
-        }
-        else if (tipo == 1){
-            Traslado ielem = (Traslado) elem_i;
-            Traslado kelem = (Traslado) elem_k;
-            ielem.cambiar_pos_heap_antiguedad(k);
-            kelem.cambiar_pos_heap_antiguedad(i);
-        }
-        else{
-            ArrayList<Integer> ielem = (ArrayList<Integer>) elem_i;
-            ArrayList<Integer> kelem = (ArrayList<Integer>) elem_k;
-            ielem.set(3,k);
-            kelem.set(3,i);
-        }
-        atributo_array.set(i,elem_k);
-        atributo_array.set(k,elem_i);
-    }
-
-    private boolean esMayorQueLosHijos (int padre, int hijoizquierdo, int hijoderecho){
-        if (padre > hijoizquierdo && padre > hijoderecho){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    
 }
