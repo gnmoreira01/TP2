@@ -55,6 +55,6 @@ public class Traslado {
     }
 
     public void cambiar_pos_heap_antiguedad(int i){
-        this.pos_heap_ganancia = i;
+        this.pos_heap_antiguedad = i;
     }
 }
