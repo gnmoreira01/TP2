@@ -19,7 +19,7 @@ public class Heap<T> {
     public Heap (ArrayList<T> array, int t){
         longitud = array.size();
         tipo = t;
-        atributo_array = array;
+        atributo_array = new ArrayList<>(array);
         //Me parece que acá se explican los problemas que tuvimos de que los heaps se modificabana simultaneamente: Estamos creando sobre el mismo array el atributo, y le estamos poniendo en ambos casos una referencia al susodicho.
         //Si le colocaramos un new estariamos haciendo una nueva lista de referencias hacia a los objetos.
         for (int i = longitud - 1; i > -1; i--){
@@ -75,7 +75,6 @@ public class Heap<T> {
         T eliminado = atributo_array.get(longitud-1);
         if(tipo!=2){
             atributo_array.remove(longitud-1);
-            //Idea: Hacer este remove luego de eliminar en ambas listas como lo haciamos anteriormente: Tirandolo al fondo y bajando la longitud.
         }
         longitud--;
         if(longitud > 0 && pos < longitud){
