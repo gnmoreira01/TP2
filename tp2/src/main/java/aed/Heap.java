@@ -192,13 +192,13 @@ public class Heap<T> {
         T elem_k = atributo_array.get(k);
         if (tipo == 0){
             Traslado ielem = (Traslado) elem_i;
-            Traslado kelem = (Traslado) elem_i;
+            Traslado kelem = (Traslado) elem_k;
             ielem.cambiar_pos_heap_ganancia(k);
             kelem.cambiar_pos_heap_ganancia(i);
         }
         else if (tipo == 1){
             Traslado ielem = (Traslado) elem_i;
-            Traslado kelem = (Traslado) elem_i;
+            Traslado kelem = (Traslado) elem_k;
             ielem.cambiar_pos_heap_antiguedad(k);
             kelem.cambiar_pos_heap_antiguedad(i);
         }
