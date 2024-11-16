@@ -73,6 +73,7 @@ public class Heap<T> {
         T eliminado = atributo_array.get(longitud-1);
         if(tipo!=2){
             atributo_array.remove(longitud-1);
+            //Idea: Hacer este remove luego de eliminar en ambas listas como lo haciamos anteriormente: Tirandolo al fondo y bajando la longitud.
         }
         longitud--;
         if(longitud > 0 && pos < longitud){
