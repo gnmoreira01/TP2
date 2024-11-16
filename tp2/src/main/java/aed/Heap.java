@@ -73,9 +73,7 @@ public class Heap<T> {
     public T eliminarPorIndice(int pos){
         swap(pos,longitud-1);
         T eliminado = atributo_array.get(longitud-1);
-        if(tipo!=2){
-            atributo_array.remove(longitud-1);
-        }
+         atributo_array.remove(longitud-1);
         longitud--;
         if(longitud > 0 && pos < longitud){
             heapify(pos);

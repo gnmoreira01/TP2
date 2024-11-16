@@ -11,6 +11,8 @@ public class BestEffort {
     private ArrayList<ArrayList<Integer>> estadisticas_ciudades;
     private ArrayList<Integer> ciudades_mayor_ganancia;
     private ArrayList<Integer> ciudades_mayor_perdida;
+    private boolean [] esta_en_mayor_ganancia;
+    private boolean [] esta_en_mayor_perdida;
 
     /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son ganancia, pérdida, superávit, posicion en el heap de
      * superávit e ID
@@ -31,6 +33,8 @@ public class BestEffort {
         heap_pedidos_por_ganancia = new Heap<Traslado>(vectorTraslados, 0);
         heap_pedidos_por_antiguedad = new Heap <Traslado> (vectorTraslados,1);
         estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
+        esta_en_mayor_ganancia = new boolean[cantCiudades];
+        esta_en_mayor_perdida = new boolean[cantCiudades];
         for (int i = 0; i < cantCiudades; i++){
            ArrayList<Integer> ciudad = new ArrayList<Integer>(); 
            ciudad.add(0);
@@ -90,6 +94,7 @@ public class BestEffort {
         }
     }
 
+
     public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
         int [] ids = new int[cantDespachos];
         for (int i = 0; i < cantDespachos; i++){
@@ -98,27 +103,39 @@ public class BestEffort {
             int perdida_pedido = ganancia_pedido;
             int ciudad_origen = pedido.origen();
             int ciudad_destino = pedido.destino();
+            int maximaGanancia = estadisticas_ciudades.get(ciudades_mayor_ganancia.get(0)).get(0);
+            int maximaPerdida = estadisticas_ciudades.get(ciudades_mayor_perdida.get(0)).get(1);
             aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
             aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,2,ganancia_pedido);
             aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
             aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,2,(-perdida_pedido));
-            if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) == 0){
-                ciudades_mayor_ganancia.add(ciudad_origen);
+            if (maximaGanancia == estadisticas_ciudades.get(ciudad_origen).get(0)){
+                if (!esta_en_mayor_ganancia[ciudad_origen]){
+                    ciudades_mayor_ganancia.add(ciudad_origen);
+                    esta_en_mayor_ganancia[ciudad_origen] = true;
+                }
             }
-            else if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0){
+            else if (estadisticas_ciudades.get(ciudad_origen).get(0)> maximaGanancia){
                 ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
+                esta_en_mayor_ganancia = new boolean[estadisticas_ciudades.size()];
                 nuevo_Ciudades.add(ciudad_origen);
                 //se supero el maximo, se elimina todos los IDs anteriormente guardados.
                 ciudades_mayor_ganancia = nuevo_Ciudades;
+                esta_en_mayor_ganancia [ciudad_origen] = true;
             }   
-            if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) == 0){
-                ciudades_mayor_perdida.add(ciudad_destino);
+            if (maximaPerdida == estadisticas_ciudades.get(ciudad_destino).get(1)){
+                if (!esta_en_mayor_perdida[ciudad_destino]){
+                    ciudades_mayor_perdida.add(ciudad_destino);
+                    esta_en_mayor_perdida[ciudad_destino] = true;
+                }
             }
-            else if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
+            else if (estadisticas_ciudades.get(ciudad_destino).get(1) > maximaPerdida){
                 ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
+                esta_en_mayor_perdida = new boolean[estadisticas_ciudades.size()];
                 nuevo_Ciudades.add(ciudad_destino);
                 //se supero el maximo, se elimina todos los IDs anteriormente guardados.
                 ciudades_mayor_perdida = nuevo_Ciudades;
+                esta_en_mayor_perdida [ciudad_destino] = true;
             }
 
             //Actualio las variables goblales y guardo el ID del pedido recién desencolado.
@@ -147,11 +164,11 @@ public class BestEffort {
         return ids;
     }
     
-    private int comparacionConElMaximo (int c, int atributo, ArrayList<Integer> arr){
+    /*private int comparacionConElMaximo (int c, int atributo, ArrayList<Integer> arr){
         ArrayList <Integer> ciudad = estadisticas_ciudades.get(c);
         ArrayList <Integer> ciudad_referencia = estadisticas_ciudades.get(arr.get(0));
         return (ciudad.get(atributo).compareTo(ciudad_referencia.get(atributo)));
-    }
+    }*/
     
     public int ciudadConMayorSuperavit(){
         return heap_ciudades_mayor_superavit.consultarIDdelMax();
