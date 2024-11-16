@@ -20,6 +20,7 @@ public class Heap<T> {
         longitud = array.size();
         tipo = t;
         atributo_array = array;
+        //Me parece que acá se explican los problemas que tuvimos de que los heaps se modificabana simultaneamente: Estamos creando sobre el mismo array el atributo, y le estamos poniendo en ambos casos una referencia al susodicho.
         for (int i = longitud - 1; i > -1; i--){
             if (tipo == 0){
                 ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
