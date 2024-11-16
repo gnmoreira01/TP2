@@ -107,7 +107,7 @@ public class BestEffort {
             }
             else if (comparacionConElMaximo(ciudad_origen,0,ciudades_mayor_ganancia) > 0){
                 ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
-                nuevo_Ciudades.add(ciudad_destino);
+                nuevo_Ciudades.add(ciudad_origen);
                 //se supero el maximo, se elimina todos los IDs anteriormente guardados.
                 ciudades_mayor_ganancia = nuevo_Ciudades;
             }   
@@ -116,7 +116,7 @@ public class BestEffort {
             }
             else if (comparacionConElMaximo(ciudad_destino,1,ciudades_mayor_perdida) > 0){
                 ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
-                nuevo_Ciudades.add(ciudad_origen);
+                nuevo_Ciudades.add(ciudad_destino);
                 //se supero el maximo, se elimina todos los IDs anteriormente guardados.
                 ciudades_mayor_perdida = nuevo_Ciudades;
             }
