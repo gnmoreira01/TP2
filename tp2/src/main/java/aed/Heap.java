@@ -66,6 +66,7 @@ public class Heap<T> {
             }
         }
     }
+    
     public T desencolar(){
         return eliminarPorIndice(0);
     }
@@ -73,7 +74,7 @@ public class Heap<T> {
     public T eliminarPorIndice(int pos){
         swap(pos,longitud-1);
         T eliminado = atributo_array.get(longitud-1);
-         atributo_array.remove(longitud-1);
+        atributo_array.remove(longitud-1);
         longitud--;
         if(longitud > 0 && pos < longitud){
             heapify(pos);
@@ -192,21 +193,26 @@ public class Heap<T> {
             Traslado kelem = (Traslado) elem_k;
             ielem.cambiar_pos_heap_ganancia(k);
             kelem.cambiar_pos_heap_ganancia(i);
+            atributo_array.set(i,elem_k);
+            atributo_array.set(k,elem_i);
         }
         else if (tipo == 1){
             Traslado ielem = (Traslado) elem_i;
             Traslado kelem = (Traslado) elem_k;
             ielem.cambiar_pos_heap_antiguedad(k);
             kelem.cambiar_pos_heap_antiguedad(i);
+            atributo_array.set(i,elem_k);
+            atributo_array.set(k,elem_i);
         }
         else{
             ArrayList<Integer> ielem = (ArrayList<Integer>) elem_i;
             ArrayList<Integer> kelem = (ArrayList<Integer>) elem_k;
             ielem.set(3,k);
             kelem.set(3,i);
+            atributo_array.set(i,elem_k);
+            atributo_array.set(k,elem_i);
         }
-        atributo_array.set(i,elem_k);
-        atributo_array.set(k,elem_i);
+
     }
 
     private boolean esMayorQueLosHijos (int padre, int hijoizquierdo, int hijoderecho){
