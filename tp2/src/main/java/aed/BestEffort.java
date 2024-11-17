@@ -14,8 +14,8 @@ public class BestEffort {
     private boolean [] esta_en_mayor_ganancia;
     private boolean [] esta_en_mayor_perdida;
 
-    /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son ganancia, pérdida, superávit, posicion en el heap de
-     * superávit e ID
+    /* estadisticas_ciudades es un vector de vectores con 5 posiciones, las cuales son: Ganancia, pérdida, superávit, posicion en el heap de
+     * superávit e ID.
      */
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
@@ -26,12 +26,14 @@ public class BestEffort {
         ArrayList<Traslado> vectorTraslados = new ArrayList<Traslado>();
         for (int i = 0; i < traslados.length; i++){
             vectorTraslados.add(traslados[i]);
-            traslados[i].negar_timestamp();
+            traslados[i].negar_timestamp(); //Esto es poder usar el heap de antiguedad cómo un max-heap.
             traslados[i].cambiar_pos_heap_antiguedad(i);
-            traslados[i].cambiar_pos_heap_ganancia(i); //Esto es solo para poder usar el heap de antiguedad como9 un max-heap.
+            traslados[i].cambiar_pos_heap_ganancia(i); 
         }
+        //Registramos todos los traslados en un bucle que va de 0 al tamaño de de la secuencia, en definitiva, eso es O(|T|). 
         heap_pedidos_por_ganancia = new Heap<Traslado>(vectorTraslados, 0);
         heap_pedidos_por_antiguedad = new Heap <Traslado> (vectorTraslados,1);
+        //Ambos heaps se crean utilizando el algoritmo de heapify sobre la secuencia anteriormente creada, por lo cual tienen complejidad O(|T|). 
         estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
         esta_en_mayor_ganancia = new boolean[cantCiudades];
         esta_en_mayor_perdida = new boolean[cantCiudades];
@@ -46,15 +48,12 @@ public class BestEffort {
            ciudades_mayor_ganancia.add(i);
            ciudades_mayor_perdida.add(i);
         }
+        //Misma lógica que el primer bucle, pero esta vez la complejidad está atada al tamaño de ciudades. O(|C|)
         heap_ciudades_mayor_superavit = new Heap<ArrayList<Integer>>(estadisticas_ciudades,2);
+        //Misma lógica que los dos heaps anteriores, con la diferencia que este se crea sobre la secuecnia estadisticas_ciudades. O(|C|)
     }
 
-    public void aumentarElemArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
-        ArrayList<Integer> elem_ciudad = array.get(ciudad);
-        int valor_viejo = elem_ciudad.get(atributoDeCiudad);
-        elem_ciudad.set(atributoDeCiudad, valor_viejo + valor);
-
-    }
+    // Conclusión: La complejidad de crear el sistema es O(|T|+|C|)
 
     public void registrarTraslados(Traslado[] nuevos_traslados){
         if (nuevos_traslados.length != 0){
@@ -64,6 +63,8 @@ public class BestEffort {
                 heap_pedidos_por_antiguedad.encolar(nuevos_traslados[i]);
             }
         }
+        //El bucle va de 0 a |T|, y dentro realiza la negación de un elemento de la lista ( O(1) ) y la operación encolar, la cual tiene costo O(log n).
+        //Conclusión: La complejidad de registrar traslados es O(|T|log(|T|))
     }
     
     public int[] despacharMasRedituables(int n){
@@ -93,82 +94,6 @@ public class BestEffort {
             return ids;
         }
     }
-
-
-    public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
-        int [] ids = new int[cantDespachos];
-        for (int i = 0; i < cantDespachos; i++){
-            Traslado pedido = heapDespachado.desencolar();
-            int ganancia_pedido = pedido.ganancia();
-            int perdida_pedido = ganancia_pedido;
-            int ciudad_origen = pedido.origen();
-            int ciudad_destino = pedido.destino();
-            int maximaGanancia = estadisticas_ciudades.get(ciudades_mayor_ganancia.get(0)).get(0);
-            int maximaPerdida = estadisticas_ciudades.get(ciudades_mayor_perdida.get(0)).get(1);
-            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
-            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,2,ganancia_pedido);
-            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
-            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,2,(-perdida_pedido));
-            if (maximaGanancia == estadisticas_ciudades.get(ciudad_origen).get(0)){
-                if (!esta_en_mayor_ganancia[ciudad_origen]){
-                    ciudades_mayor_ganancia.add(ciudad_origen);
-                    esta_en_mayor_ganancia[ciudad_origen] = true;
-                }
-            }
-            else if (estadisticas_ciudades.get(ciudad_origen).get(0)> maximaGanancia){
-                ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
-                esta_en_mayor_ganancia = new boolean[estadisticas_ciudades.size()];
-                nuevo_Ciudades.add(ciudad_origen);
-                //se supero el maximo, se elimina todos los IDs anteriormente guardados.
-                ciudades_mayor_ganancia = nuevo_Ciudades;
-                esta_en_mayor_ganancia [ciudad_origen] = true;
-            }   
-            if (maximaPerdida == estadisticas_ciudades.get(ciudad_destino).get(1)){
-                if (!esta_en_mayor_perdida[ciudad_destino]){
-                    ciudades_mayor_perdida.add(ciudad_destino);
-                    esta_en_mayor_perdida[ciudad_destino] = true;
-                }
-            }
-            else if (estadisticas_ciudades.get(ciudad_destino).get(1) > maximaPerdida){
-                ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
-                esta_en_mayor_perdida = new boolean[estadisticas_ciudades.size()];
-                nuevo_Ciudades.add(ciudad_destino);
-                //se supero el maximo, se elimina todos los IDs anteriormente guardados.
-                ciudades_mayor_perdida = nuevo_Ciudades;
-                esta_en_mayor_perdida [ciudad_destino] = true;
-            }
-
-            //Actualio las variables goblales y guardo el ID del pedido recién desencolado.
-
-            cantidad_pedidos_despachados+= 1;
-            ganancia_global+= ganancia_pedido;
-            ids[i] = pedido.id();
-
-            //Si es del tipo 0 es el heap por ganancia, asi que me falta actualizar el heap antiguedad.
-            //Para ello eliminare por indice en dicho heap. Misma lógica para el tipo 1, pero al revés.
-            if(tipo == 0){
-                heap_pedidos_por_antiguedad.eliminarPorIndice(pedido.pos_heap_antiguedad);
-            }
-
-            else{
-                heap_pedidos_por_ganancia.eliminarPorIndice(pedido.pos_heap_ganancia);
-            }
-            //Tengo que "actualizar" el heap Superavit, ya que han cambiado los valores de dos nodos.
-            //Para ello elimino en el heap dichos valores y los vuelvo a encoar (Para que la comparación se realice con el valor modificado)
-
-            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_destino)).get(3));
-            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_destino));
-            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_origen)).get(3));
-            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_origen));
-        }
-        return ids;
-    }
-    
-    /*private int comparacionConElMaximo (int c, int atributo, ArrayList<Integer> arr){
-        ArrayList <Integer> ciudad = estadisticas_ciudades.get(c);
-        ArrayList <Integer> ciudad_referencia = estadisticas_ciudades.get(arr.get(0));
-        return (ciudad.get(atributo).compareTo(ciudad_referencia.get(atributo)));
-    }*/
     
     public int ciudadConMayorSuperavit(){
         return heap_ciudades_mayor_superavit.consultarIDdelMax();
@@ -186,4 +111,90 @@ public class BestEffort {
         return ganancia_global/cantidad_pedidos_despachados;
     }
     
+    public void aumentarElemArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
+        ArrayList<Integer> elem_ciudad = array.get(ciudad);
+        int valor_viejo = elem_ciudad.get(atributoDeCiudad);
+        elem_ciudad.set(atributoDeCiudad, valor_viejo + valor);
+
+    }
+
+    public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
+        int [] ids = new int[cantDespachos];
+        //Para no dificultar la lectura, aclararemos la complejidad de las operaciones que estén por encima de O(1). 
+        for (int i = 0; i < cantDespachos; i++){
+            Traslado pedido = heapDespachado.desencolar(); //O(log(|T|)), pues heap despachado puede ser el de mayor antiguedad o mayor ganancia.
+            int ganancia_pedido = pedido.ganancia();
+            int perdida_pedido = ganancia_pedido;
+            int ciudad_origen = pedido.origen();
+            int ciudad_destino = pedido.destino();
+            int maximaGanancia = estadisticas_ciudades.get(ciudades_mayor_ganancia.get(0)).get(0);
+            int maximaPerdida = estadisticas_ciudades.get(ciudades_mayor_perdida.get(0)).get(1);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,0,ganancia_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_origen,2,ganancia_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,1,perdida_pedido);
+            aumentarElemArrayList(estadisticas_ciudades,ciudad_destino,2,(-perdida_pedido)); //AumentarElemArrayList solo utiliza get y set, que son complejidades O(1).
+            if (maximaGanancia == estadisticas_ciudades.get(ciudad_origen).get(0)){
+                if (!esta_en_mayor_ganancia[ciudad_origen]){
+                    ciudades_mayor_ganancia.add(ciudad_origen);
+                    esta_en_mayor_ganancia[ciudad_origen] = true;
+                }
+                //Si luego del despacho, se empató el máximo, se agrega a las ciudades con mayor ganancia. 
+                //¿Por qué hacemos el pertenece? Para que no haya duplicados.
+                //¿Cómo lo hacemos en O(1)? Con un array de booleanos.  
+            }
+            else if (estadisticas_ciudades.get(ciudad_origen).get(0)> maximaGanancia){
+                ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
+                esta_en_mayor_ganancia = new boolean[estadisticas_ciudades.size()];
+                nuevo_Ciudades.add(ciudad_origen);
+                ciudades_mayor_ganancia = nuevo_Ciudades;
+                esta_en_mayor_ganancia [ciudad_origen] = true;
+                //Como se supero el máximo, se elimina todos los IDs anteriormente guardados y se "reinicia" el array de booleanos.
+            }   
+            if (maximaPerdida == estadisticas_ciudades.get(ciudad_destino).get(1)){
+                if (!esta_en_mayor_perdida[ciudad_destino]){
+                    ciudades_mayor_perdida.add(ciudad_destino);
+                    esta_en_mayor_perdida[ciudad_destino] = true;
+                }
+                //Misma lógica del primer if.
+            }
+            else if (estadisticas_ciudades.get(ciudad_destino).get(1) > maximaPerdida){
+                ArrayList<Integer> nuevo_Ciudades = new ArrayList<Integer>();
+                esta_en_mayor_perdida = new boolean[estadisticas_ciudades.size()];
+                nuevo_Ciudades.add(ciudad_destino);
+                ciudades_mayor_perdida = nuevo_Ciudades;
+                esta_en_mayor_perdida [ciudad_destino] = true;
+                //Misma lógica del else if.
+            }
+
+            cantidad_pedidos_despachados+= 1;
+            ganancia_global+= ganancia_pedido;
+            ids[i] = pedido.id();
+            //Actualizo las variables goblales y guardo el ID del pedido recién desencolado.
+
+            
+            if(tipo == 0){
+                heap_pedidos_por_antiguedad.eliminarPorIndice(pedido.pos_heap_antiguedad);
+            }
+
+            else{
+                heap_pedidos_por_ganancia.eliminarPorIndice(pedido.pos_heap_ganancia);
+            }
+
+            //Si es del tipo 0 es el heap por ganancia, asi que me falta actualizar el heap antiguedad, y viceversa para el tipo 1.
+            //Para ello eliminaré por indice en el heap "contrario" ¿Pero cómo sé la posición en dicho heap? Porque la tengo guardada!
+            //En ambos casos, eliminar por indice es O(log(|T|))
+
+            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_destino)).get(3));
+            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_destino));
+            heap_ciudades_mayor_superavit.eliminarPorIndice((estadisticas_ciudades.get(ciudad_origen)).get(3));
+            heap_ciudades_mayor_superavit.encolar(estadisticas_ciudades.get(ciudad_origen));
+
+            //Tengo que "actualizar" el heap superavit, ya que han cambiado los valores de dos elementos.
+            //Para ello elimino en el heap dichos valores y los vuelvo a encolar (Para que la comparación se realice con el valor modificado).
+            //Encolar y eliminar por indice son O(log(|C|))
+        }
+        //El for realizado va de 0 a cantDespachos, y el bloque interno tiene complejidad O(log(|C|)+log(|T|)).
+        //Conclusión: O(cantDespachos(log(|C|)+log(|T|)))
+        return ids;
+    }
 }
