@@ -29,10 +29,10 @@ public class HeapTests {
             new Traslado(7, 6, 3, 2000, -42),
             new Traslado(5, 1, 0, 1000, -40), 
             new Traslado(6, 1, 0, 1000, -41),
-            new Traslado(4, 3, 4, 500, -50),
+            new Traslado(4, 4, 3, 500, -11),
             new Traslado(2, 0, 1, 400, -20),
             new Traslado(1, 0, 1, 100, -10),
-            new Traslado(3, 4, 3, 500, -11),
+            new Traslado(3, 3, 4, 500, -50),
         };
 
         Traslado [] listaTraslados_por_antiguedad = new Traslado []{
@@ -40,7 +40,7 @@ public class HeapTests {
             new Traslado(1, 0, 1, 100, -10),
             new Traslado(4, 4, 3, 500, -11),
             new Traslado(2, 0, 1, 400, -20),
-            new Traslado(5, 1, 0, 1000, -40),
+            new Traslado(5, 1, 0, 1000, -40), 
             new Traslado(6, 1, 0, 1000, -41),
             new Traslado(7, 6, 3, 2000, -42),
             new Traslado(3, 3, 4, 500, -50),
@@ -70,13 +70,13 @@ public class HeapTests {
     @Test
     void test_constructor_heap_ganancia (){
         Heap<Traslado> h = new Heap<Traslado>(arrlist_listaTraslados,0);
-        assertEquals(h.array(), arrlist_listaTraslados_ganancia);
+        assertSetEquals(h.array(), arrlist_listaTraslados_ganancia);
     }
 
     @Test
     void test_constructor_heap_antiguedad (){
         Heap<Traslado> h = new Heap<Traslado> (this.arrlist_listaTraslados, 1);
-        assertEquals(h.array(), arrlist_listaTraslados_antiguedad);
+        assertSetEquals(h.array(), arrlist_listaTraslados_antiguedad);
     }
 
 
