@@ -30,10 +30,10 @@ public class BestEffort {
             traslados[i].cambiar_pos_heap_antiguedad(i);
             traslados[i].cambiar_pos_heap_ganancia(i); 
         }
-        //Registramos todos los traslados en un bucle que va de 0 al tamaño de de la secuencia, en definitiva, eso es O(|T|). 
+        //Registramos todos los traslados en un bucle que va de 0 al tamaño de la secuencia, en definitiva, eso es O(|T|). 
         heap_pedidos_por_ganancia = new Heap<Traslado>(vectorTraslados, 0);
         heap_pedidos_por_antiguedad = new Heap <Traslado> (vectorTraslados,1);
-        //Ambos heaps se crean utilizando el algoritmo de heapify sobre la secuencia anteriormente creada, por lo cual tienen complejidad O(|T|). 
+        //Ambos heaps se crean utilizando el algoritmo de heapify sobre la secuencia anteriormente formada, por lo cual tienen complejidad O(|T|). 
         estadisticas_ciudades = new ArrayList<ArrayList<Integer>>();
         esta_en_mayor_ganancia = new boolean[cantCiudades];
         esta_en_mayor_perdida = new boolean[cantCiudades];
@@ -79,6 +79,7 @@ public class BestEffort {
             ids = despacho(heap_pedidos_por_ganancia,n,0);   
             return ids;
         }
+        //El peor caso en cuanto a complejidad es el de la rama else, que tiene complejidad O(n(log(|C|)+log(|T|))).
     }
 
     public int[] despacharMasAntiguos(int n){
@@ -93,22 +94,27 @@ public class BestEffort {
             ids = despacho(heap_pedidos_por_antiguedad,n,1);   
             return ids;
         }
+        //El peor caso en cuanto a complejidad es el de la rama else, que tiene complejidad O(n(log(|C|)+log(|T|))).
     }
     
     public int ciudadConMayorSuperavit(){
         return heap_ciudades_mayor_superavit.consultarIDdelMax();
+        //Es ver un atributo de la primera posición. O(1).
     }
 
     public ArrayList<Integer> ciudadesConMayorGanancia(){
         return ciudades_mayor_ganancia;
+        //Simplemente devuelve un atributo: O(1).
     }
 
     public ArrayList<Integer> ciudadesConMayorPerdida(){
         return ciudades_mayor_perdida;
+        //Simplemente devuelve un atributo: O(1).
     }
 
     public int gananciaPromedioPorTraslado(){ 
         return ganancia_global/cantidad_pedidos_despachados;
+        //Son todas operaciones elementales: O(1).
     }
     
     public void aumentarElemArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
