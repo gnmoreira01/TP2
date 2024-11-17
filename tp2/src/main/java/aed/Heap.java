@@ -20,8 +20,6 @@ public class Heap<T> {
         longitud = array.size();
         tipo = t;
         atributo_array = new ArrayList<>(array);
-        //Me parece que acá se explican los problemas que tuvimos de que los heaps se modificabana simultaneamente: Estamos creando sobre el mismo array el atributo, y le estamos poniendo en ambos casos una referencia al susodicho.
-        //Si le colocaramos un new estariamos haciendo una nueva lista de referencias hacia a los objetos.
         for (int i = longitud - 1; i > -1; i--){
             if (tipo == 0){
                 ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
@@ -111,8 +109,6 @@ public class Heap<T> {
         else if(tipo== 1){
             ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
             return a.get(i).id();
-            //Nota: En realidad no nos interesa que haya un criterio de desmpate para translado más antiguo, ya que los timestamp nunca pueden ser iguales. 
-            //Pero, como tambien la usamos para devolver los IDS a la hora de despachar, utilizamos el ID como "segundo criterio".
         }    
         else{
             ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
