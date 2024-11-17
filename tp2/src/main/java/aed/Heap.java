@@ -20,6 +20,8 @@ public class Heap<T> {
         longitud = array.size();
         tipo = t;
         atributo_array = new ArrayList<>(array);
+        //Me parece que acá se explican los problemas que tuvimos de que los heaps se modificabana simultaneamente: Estamos creando sobre el mismo array el atributo, y le estamos poniendo en ambos casos una referencia al susodicho.
+        //Si le colocaramos un new estariamos haciendo una nueva lista de referencias hacia a los objetos.
         for (int i = longitud - 1; i > -1; i--){
             if (tipo == 0){
                 ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
@@ -37,6 +39,10 @@ public class Heap<T> {
         }
     }
 
+    public ArrayList<T> array(){
+        return atributo_array;
+    }
+    
     public int longitud(){
         return longitud;
     }
@@ -109,6 +115,8 @@ public class Heap<T> {
         else if(tipo== 1){
             ArrayList<Traslado> a = (ArrayList<Traslado>) atributo_array;
             return a.get(i).id();
+            //Nota: En realidad no nos interesa que haya un criterio de desmpate para translado más antiguo, ya que los timestamp nunca pueden ser iguales. 
+            //Pero, como tambien la usamos para devolver los IDS a la hora de despachar, utilizamos el ID como "segundo criterio".
         }    
         else{
             ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
@@ -189,26 +197,21 @@ public class Heap<T> {
             Traslado kelem = (Traslado) elem_k;
             ielem.cambiar_pos_heap_ganancia(k);
             kelem.cambiar_pos_heap_ganancia(i);
-            atributo_array.set(i,elem_k);
-            atributo_array.set(k,elem_i);
         }
         else if (tipo == 1){
             Traslado ielem = (Traslado) elem_i;
             Traslado kelem = (Traslado) elem_k;
             ielem.cambiar_pos_heap_antiguedad(k);
             kelem.cambiar_pos_heap_antiguedad(i);
-            atributo_array.set(i,elem_k);
-            atributo_array.set(k,elem_i);
         }
         else{
             ArrayList<Integer> ielem = (ArrayList<Integer>) elem_i;
             ArrayList<Integer> kelem = (ArrayList<Integer>) elem_k;
             ielem.set(3,k);
             kelem.set(3,i);
-            atributo_array.set(i,elem_k);
-            atributo_array.set(k,elem_i);
         }
-
+        atributo_array.set(i,elem_k);
+        atributo_array.set(k,elem_i);
     }
 
     private boolean esMayorQueLosHijos (int padre, int hijoizquierdo, int hijoderecho){
