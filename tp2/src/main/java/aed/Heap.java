@@ -37,6 +37,11 @@ public class Heap<T> {
         }
     }
 
+    // Esta función se emplea únicamente con propósitos de testing.
+    public ArrayList<T> array(){
+        return atributo_array;
+    }
+
     public int longitud(){
         return longitud;
     }
