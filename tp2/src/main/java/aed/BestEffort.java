@@ -59,6 +59,8 @@ public class BestEffort {
         if (nuevos_traslados.length != 0){
             for (int i = 0; i < nuevos_traslados.length; i++){
                 nuevos_traslados[i].negar_timestamp();
+                nuevos_traslados[i].cambiar_pos_heap_antiguedad(heap_pedidos_por_antiguedad.longitud());
+                nuevos_traslados[i].cambiar_pos_heap_ganancia(heap_pedidos_por_ganancia.longitud()); 
                 heap_pedidos_por_ganancia.encolar(nuevos_traslados[i]);
                 heap_pedidos_por_antiguedad.encolar(nuevos_traslados[i]);
             }
