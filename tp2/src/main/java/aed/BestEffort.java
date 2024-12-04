@@ -113,13 +113,6 @@ public class BestEffort {
         return ganancia_global/cantidad_pedidos_despachados;
         //Son todas operaciones elementales: O(1).
     }
-    
-    public void aumentarElemArrayList (ArrayList<ArrayList<Integer>> array, int ciudad, int atributoDeCiudad, int valor){
-        ArrayList<Integer> elem_ciudad = array.get(ciudad);
-        int valor_viejo = elem_ciudad.get(atributoDeCiudad);
-        elem_ciudad.set(atributoDeCiudad, valor_viejo + valor);
-
-    }
 
     public int [] despacho(Heap<Traslado> heapDespachado,int cantDespachos, int tipo){
         int [] ids = new int[cantDespachos];
