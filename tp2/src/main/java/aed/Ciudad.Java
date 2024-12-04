@@ -32,7 +32,7 @@ public class Ciudad {
     }
 
     public void sumar_perdida (int g){
-        ganancia = ganancia + g;
+        perdida = perdida + g;
     }
 
     public int superavit(){

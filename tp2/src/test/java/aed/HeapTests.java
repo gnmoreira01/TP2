@@ -1,9 +1,7 @@
 package aed;
-import java.util.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 
 public class HeapTests {
