@@ -128,7 +128,7 @@ public class BestEffort {
             estadisticas_ciudades.get(ciudad_origen).sumar_ganancia(ganancia_pedido);
             estadisticas_ciudades.get(ciudad_origen).actualizar_superavit();
             estadisticas_ciudades.get(ciudad_destino).sumar_perdida(perdida_pedido);
-            estadisticas_ciudades.get(ciudad_destino).actualizar_superavit(); // ACLARAR POR QUÉ ************************************************************************ O(1).
+            estadisticas_ciudades.get(ciudad_destino).actualizar_superavit(); // Son modificaciones de atributos, O(1).
             if (maximaGanancia == estadisticas_ciudades.get(ciudad_origen).ganancia()){
                 if (!esta_en_mayor_ganancia[ciudad_origen]){
                     ciudades_mayor_ganancia.add(ciudad_origen);
