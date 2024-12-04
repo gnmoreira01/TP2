@@ -30,8 +30,8 @@ public class Heap<T> {
                 a.get(i).cambiar_pos_heap_antiguedad(i);
             }
             else{
-                ArrayList<ArrayList<Integer>> a = (ArrayList<ArrayList<Integer>>) atributo_array;
-                a.get(i).set(3,i);
+                ArrayList<Ciudad> a = (ArrayList<Ciudad>) atributo_array;
+                a.get(i).modificar_posicion_heap(i);
             }
             heapify(i);
         }
@@ -100,8 +100,8 @@ public class Heap<T> {
                 return a.get(i).timestamp();
             }
             else{
-                ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
-                return a.get(i).get(2);
+                ArrayList<Ciudad> a = (ArrayList <Ciudad>) atributo_array;
+                return a.get(i).superavit();
             }
         }
     }
@@ -116,8 +116,8 @@ public class Heap<T> {
             return a.get(i).id();
         }    
         else{
-            ArrayList<ArrayList<Integer>> a = (ArrayList <ArrayList<Integer>>) atributo_array;
-            return a.get(i).get(4);
+            ArrayList<Ciudad> a = (ArrayList <Ciudad>) atributo_array;
+            return a.get(i).id();
         }
     }
 
@@ -206,14 +206,13 @@ public class Heap<T> {
             atributo_array.set(k,elem_i);
         }
         else{
-            ArrayList<Integer> ielem = (ArrayList<Integer>) elem_i;
-            ArrayList<Integer> kelem = (ArrayList<Integer>) elem_k;
-            ielem.set(3,k);
-            kelem.set(3,i);
+            Ciudad ielem = (Ciudad) elem_i;
+            Ciudad kelem = (Ciudad) elem_k;
+            ielem.modificar_posicion_heap(k);
+            kelem.modificar_posicion_heap(i);
             atributo_array.set(i,elem_k);
             atributo_array.set(k,elem_i);
         }
-
     }
 
     private boolean esMayorQueLosHijos (int padre, int hijoizquierdo, int hijoderecho){
